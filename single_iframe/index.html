@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout Frames v2: Single Frame</title>
+    <link rel="stylesheet" href="normalize.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+      <img src="logo.png" alt="logo">
+    <table>
+      <tr>      
+        <td width="50%">
+          Checkout 
+        </td>
+        <td width="50%">          <span><b>Order Summary</b></span><br/><br/>
+          <span>Black T-Shirt * 1 --- EU XL Size/span><br/>
+          <span><b>Total Price:</b> 24.99 EUR</span><br/>
+</td>
+      </tr>
+      <tr><td><br/><br/><br/><br/></td></tr>
+      <tr><td><b>Payment Option 1 -- Pay with Cards</b></td></tr>
+      <tr><td><br/></td></tr>
+      <tr><td><form
+        id="payment-form"
+        method="POST"
+        action="https://merchant.com/charge-card"
+      >
+        <div class="one-liner">
+          <div class="card-frame"></div>
+          <button id="pay-button" disabled>
+            PAY EUR 24.99
+          </button>
+        </div>
+        <p class="error-message"></p>
+        <p class="success-payment-message"></p>
+      </form></td></tr>
+      <tr><td><br/></td></tr>
+      <tr><td><b>Payment Option 2 -- Pay with Giropay, the most popular bank transfer method in Germany</b></td></tr>
+      <tr><td><br/></td></tr>
+      <tr><td><b>Payment Option 3 -- One touch with Google Pay</b></td></tr>
+      <tr>
+        <td>
+        <button onclick="payGiropay()">Pay 24.99 EUR with Giropay</button></td>
+      </tr>
+
+  </table>
+
+    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
