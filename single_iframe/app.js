@@ -78,27 +78,50 @@ function onCardTokenized(event) {
     "token": event.token
   };
 
-  fetch("http://localhost:5000/api/payments",
-  {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-  })
-  .then(response => response.json())
-  .then(function(data){
-    console.log(data)
-    if (data['success'] === true){
-      location.assign(data['3ds_redirect'])
-      window.alert('Payment Authorized!')    
-    } else if (data['success'] === false) {
-      window.alert('Payment failed!')      
-    }
-  })
-  // .catch((error) => {
-  //   console.log("Error")
-  //   window.alert('Payment failed!') })
+  var threeDSChallenge = document.getElementById('3ds_challenge').value;
+
+  if (threeDSChallenge === 'Y') {
+    console.log("3ds")
+    fetch("http://localhost:5000/api/payments/3DS",
+    {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(function(data){
+      console.log(data)
+      if (data['success'] === true){
+        location.assign(data['3ds_redirect'])
+        // window.alert('Payment Authorized!')    
+      } else if (data['success'] === false) {
+        window.alert('Payment failed!')      
+      }
+    })    
+
+  } else {
+    console.log("no_3ds")
+    fetch("http://localhost:5000/api/payments",
+    {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(function(data){
+      console.log(data)
+      if (data['success'] === true){
+        // location.assign(data['3ds_redirect'])
+        window.alert('Payment Authorized!')    
+      } else if (data['success'] === false) {
+        window.alert('Payment failed!')      
+      }
+    })    
+  }
 }
 
 form.addEventListener("submit", function (event) {
