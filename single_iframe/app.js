@@ -3,7 +3,10 @@ var payButton = document.getElementById("pay-button");
 var form = document.getElementById("payment-form");
 var errorStack = [];
 
-Frames.init("pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a");
+Frames.init({
+  publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
+  localization: "DE-DE"
+});
 
 Frames.addEventHandler(
   Frames.Events.CARD_VALIDATION_CHANGED,
@@ -87,6 +90,7 @@ function onCardTokenized(event) {
   .then(function(data){
     console.log(data)
     if (data['success'] === true){
+      location.assign(data['3ds_redirect'])
       window.alert('Payment Authorized!')    
     } else if (data['success'] === false) {
       window.alert('Payment failed!')      
@@ -99,6 +103,20 @@ function onCardTokenized(event) {
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
+
+  Frames.cardholder = {
+    name: "John Smith",
+    email: "john.smith@gmail.com",
+    billingAddress: {
+      addressLine1: "JJJ Street",
+      addressLine2: "Apartment 8",
+      zip: "31313",
+      city: "Hinesville",
+      state: "Georgia",
+      country: "US",
+    },
+    phone: "9125084652"
+  };
   Frames.submitCard();
 });
 

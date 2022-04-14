@@ -60,8 +60,10 @@ router.post('/', (req, res) => {
       'currency': 'EUR',
       'reference': 'ORD-5023-4E89',
       'customer': {
-        'email': 'john.test@example.com',
-        'name': 'John Test'
+        'email': 'john.smith@example.com'
+      },
+      "3ds": {
+        "enabled": true
       }
   }
   
@@ -80,8 +82,17 @@ router.post('/', (req, res) => {
     console.log(JSON.stringify(response.data));
     console.log(response.data.status)
     var paymentStatus = response.data.status;
-    if (paymentStatus === 'Authorized')
-      res.status(200).json({'success': true});
+    if (paymentStatus === 'Authorized'){
+      res.status(200).json({
+        'success': true
+      });
+    } else if (paymentStatus === 'Pending') {
+      res.status(200).json({
+        'success': true,
+        '3ds_redirect': response.data['_links']['redirect']['href']
+      });
+      
+    }
   })
   .catch(function (error) {
     console.log(error);

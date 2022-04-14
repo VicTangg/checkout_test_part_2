@@ -20,8 +20,28 @@
           <span><b>Total Price:</b> 24.99 EUR</span><br/>
 </td>
       </tr>
-      <tr><td><br/><br/><br/><br/></td></tr>
-      <tr><td><b>Payment Option 1 -- Pay with Cards</b></td></tr>
+      <tr><td><br/><br/></td></tr>
+      <tr><td><b>Payment Option 1 -- mit Karte bezahlen (Pay with Cards 3DS2 Challenge)</b></td></tr>
+      <tr><td>
+          <label for="fname">Name</label>
+  <input type="text" id="fname" name="fname" value="John Smith"><br><br>
+  <label for="lname">Email</label>
+  <input type="text" id="lname" name="lname" value="john.smith@gmail.com"><br><br>
+  <label for="lname">Billing Address Line 1</label>
+  <input type="text" id="lname" name="lname" value="JJJ Street"><br><br>
+  <label for="lname">Billing Address Line 2</label>
+  <input type="text" id="lname" name="lname" value="Apartment 8"><br><br>
+  <label for="lname">zip</label>
+  <input type="text" id="lname" name="lname" value="31313"><br><br>
+  <label for="lname">city</label>
+  <input type="text" id="lname" name="lname" value="Hinesville"><br><br>
+  <label for="lname">state</label>
+  <input type="text" id="lname" name="lname" value="Georgia"><br><br>
+  <label for="lname">country</label>
+  <input type="text" id="lname" name="lname" value="US"><br><br>
+  <label for="lname">Phone</label>
+  <input type="text" id="lname" name="lname" value="9125084652"><br><br>
+</td></tr>      
       <tr><td><br/></td></tr>
       <tr><td><form
         id="payment-form"
@@ -31,7 +51,7 @@
         <div class="one-liner">
           <div class="card-frame"></div>
           <button id="pay-button" disabled>
-            PAY EUR 24.99
+              24.99 € bezahlen
           </button>
         </div>
         <p class="error-message"></p>
@@ -40,13 +60,13 @@
       <tr><td><br/></td></tr>
       <tr><td><b>Payment Option 2 -- Pay with Giropay, the most popular bank transfer method in Germany</b></td></tr>
       <tr><td><br/></td></tr>
-      <tr><td><b>Payment Option 3 -- One touch with Google Pay</b></td></tr>
       <tr>
         <td>
         <button onclick="payGiropay()">Pay 24.99 EUR with Giropay</button></td>
       </tr>
+      <tr><td><br/></td></tr>
+      <tr><td><b>Payment Option 3 -- One touch with Google Pay</b></td></tr>
 
-      
   </table>
 
     <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
