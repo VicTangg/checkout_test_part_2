@@ -6,6 +6,37 @@ router.get('/', (req, res) => {
   res.json('');
 });
 
+router.post('/paymentStatus', (req, res) => {
+  var paymentID = req.body.paymentID
+  var config = {
+    method: 'get',
+    url: 'https://api.sandbox.checkout.com/payments/' + paymentID,
+    headers: {
+      'Authorization': 'sk_test_0b9b5db6-f223-49d0-b68f-f6643dd4f808',
+      'Content-Type': 'application/json'
+    }
+  };
+
+  axios(config)
+  .then(function (response) {
+    var status = response.data['status'] 
+    console.log(status);
+    // console.log(response.data.status)
+    // var paymentStatus = response.data.status;
+    // if (paymentStatus === 'Authorized')
+    res.status(200).json({
+      'success': true,
+      'paymentStatus': status
+    });
+  })
+  .catch(function (error) {
+    console.log(error);
+    // console.log('return')
+    res.status(404).json({'success': false})
+  });
+})
+
+
 router.post('/giropay', (req, res) => {
   var data =  {
     'source': {
@@ -79,8 +110,13 @@ router.post('/', (req, res) => {
     console.log(JSON.stringify(response.data));
     console.log(response.data.status)
     var paymentStatus = response.data.status;
-    if (paymentStatus === 'Authorized')
-      res.status(200).json({'success': true});
+    if (paymentStatus === 'Authorized' || paymentStatus === 'Captured')
+      res.status(200).json(
+        {
+          'success': true,
+          'paymentID': response.data.id
+        }
+        );
   })
   .catch(function (error) {
     console.log(error);

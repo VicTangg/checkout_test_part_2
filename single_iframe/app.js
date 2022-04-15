@@ -2,6 +2,7 @@
 var payButton = document.getElementById("pay-button");
 var form = document.getElementById("payment-form");
 var errorStack = [];
+var paymentID;
 
 Frames.init({
   publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
@@ -116,7 +117,8 @@ function onCardTokenized(event) {
       console.log(data)
       if (data['success'] === true){
         // location.assign(data['3ds_redirect'])
-        window.alert('Payment Authorized!')    
+        window.alert('Payment Authorized!')
+        paymentID = data['paymentID'];
       } else if (data['success'] === false) {
         window.alert('Payment failed!')      
       }
@@ -155,6 +157,28 @@ function payGiropay(){
   .then(function(data){
     console.log(data)
     location.assign(data['redirectUrl'])
+  })
+
+  console.log('I am here')
+}
+
+function checkPaymentStatus(){
+  var payload = {
+    "paymentID": paymentID
+  };
+
+  fetch("http://localhost:5000/api/payments/paymentStatus",
+  {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    })
+  .then(response => response.json())
+  .then(function(data){
+    console.log(data)
+    window.alert(data['paymentStatus'])      
   })
 
   console.log('I am here')
