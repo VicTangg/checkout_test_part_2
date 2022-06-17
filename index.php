@@ -1,1 +1,1 @@
-<?php include_once("./single_iframe/index.html");?>
+<?php include_once("./single_iframe/home.html");?>
