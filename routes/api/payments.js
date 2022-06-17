@@ -38,13 +38,16 @@ router.post('/paymentStatus', (req, res) => {
 
 
 router.post('/giropay', (req, res) => {
+  apmMethod = req.body.apmMethod
+  currencyType = req.body.currencyType
+
   var data =  {
     'source': {
-      'type': 'giropay',
+      'type': apmMethod,
       'purpose': 'Mens black t-shirt L'
     },
     'amount': 2499,
-    'currency': 'EUR',
+    'currency': currencyType,
     "success_url": "http://example.com/payments/success",
     "failure_url": "http://example.com/payments/fail"
 }

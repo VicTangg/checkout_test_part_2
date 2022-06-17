@@ -145,14 +145,21 @@ form.addEventListener("submit", function (event) {
   Frames.submitCard();
 });
 
-function payGiropay(){
+function payAPM(apmMethod, currencyType = 'EUR'){
+  var payload = {
+    "apmMethod": apmMethod,
+    "currencyType": currencyType
+  };
+
+
   fetch("http://localhost:5000/api/payments/giropay",
   {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-      }
-  })
+      },
+      body: JSON.stringify(payload)
+    })
   .then(response => response.json())
   .then(function(data){
     console.log(data)
