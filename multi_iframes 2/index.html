@@ -18,13 +18,13 @@
       <p>AMEX Test Card: 345678901234564</p>
       <label for="card-number">Card number</label>
       <div class="input-container card-number" style="background-color:rgb(247,245,243)">
-        <div class="icon-container">
+        <!-- <div class="icon-container">
           <img
             id="icon-card-number"
             src="images/card-icons/card.svg"
             alt="PAN"
           />
-        </div>
+        </div> -->
         <div class="card-number-frame"></div>
         <div class="icon-container payment-method">
           <img id="logo-payment-method" />
@@ -38,13 +38,13 @@
         <div>
           <label for="expiry-date">Expiry date</label>
           <div class="input-container expiry-date" style="background-color:rgb(247,245,243)">
-            <div class="icon-container">
+            <!-- <div class="icon-container">
               <img
                 id="icon-expiry-date"
                 src="images/card-icons/exp-date.svg"
                 alt="Expiry date"
               />
-            </div>
+            </div> -->
             <div class="expiry-date-frame"></div>
             <div class="icon-container">
               <img
@@ -59,13 +59,22 @@
         <div>
           <label for="cvv">Security code</label>
           <div class="input-container cvv" style="background-color:rgb(247,245,243)">
-            <div class="icon-container">
-              <img id="icon-cvv" src="images/card-icons/cvv.svg" alt="CVV" />
-            </div>
+            <!-- <div class="icon-container">
+              <img id="icon-cvv" src="images/card-icons/zstore_cvv.svg" alt="CVV" />
+            </div> -->
             <div class="cvv-frame"></div>
-            <div class="icon-container">
+            <!-- <div class="icon-container">
               <img id="icon-cvv-error" src="images/card-icons/error.svg" />
+            </div> -->
+            <div class="icon-container">
+              <img id="icon-cvv" style="flex: 1 1 auto; padding-right: 15px;" src="images/card-icons/zstore_cvv.svg" alt="CVV" />
             </div>
+
+            <!-- Section below is newly added -->
+            <!-- <div class="icon-container">
+              <img id="icon-cvv" style="flex: 1 1 auto; padding-right: 15px;" src="images/card-icons/zstore_cvv.svg" alt="CVV" />
+            </div> -->
+            <!-- Section above is newly added -->
           </div>
         </div>
       </div>
@@ -73,6 +82,7 @@
       <button id="pay-button" disabled="" style="background-color:rgb(153,34,63)">
         PAY HKD 900
       </button>
+      <b><p id="error-message-display"></p></b>
 
       <div>
         <span class="error-message error-message__card-number"></span>

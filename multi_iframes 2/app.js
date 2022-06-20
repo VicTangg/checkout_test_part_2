@@ -2,6 +2,7 @@
 var payButton = document.getElementById("pay-button");
 var form = document.getElementById("payment-form");
 var discountCode = document.getElementById("discount-code");
+var errorMessageDisplay = document.getElementById("error-message-display");
 
 Frames.init({
   publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
@@ -31,6 +32,7 @@ function generateLogos() {
     alt: "expiry date logo",
   };
   logos["cvv"] = {
+    // src: "cvv",
     src: "cvv",
     alt: "cvv logo",
   };
@@ -48,17 +50,26 @@ Frames.addEventHandler(
 );
 function onValidationChanged(event) {
   var e = event.element;
+  console.log(event)
 
   if (event.isValid || event.isEmpty) {
     if (e === "card-number" && !event.isEmpty) {
       showPaymentMethodIcon();
     }
+    errorMessageDisplay.innerHTML = ""
     setDefaultIcon(e);
     clearErrorIcon(e);
     clearErrorMessage(e);
   } else {
     if (e === "card-number") {
       clearPaymentMethodIcon();
+      errorMessageDisplay.innerHTML = "Card Number is invalid"
+    }
+    if (e === "expiry-date") {
+      errorMessageDisplay.innerHTML = "expiry date is invalid"
+    }
+    if (e === "cvv") {
+      errorMessageDisplay.innerHTML = "CVV is invalid"
     }
     setDefaultErrorIcon(e);
     setErrorIcon(e);
@@ -83,8 +94,13 @@ function showPaymentMethodIcon(parent, pm) {
   var logo = document.getElementById("logo-payment-method");
   if (pm) {
     var name = pm.toLowerCase();
-    logo.setAttribute("src", "images/card-icons/" + name + ".svg");
-    logo.setAttribute("alt", pm || "payment method");
+
+    if (pm == "default"){
+      logo.setAttribute("src", "images/card-icons/zstore_lock.svg");
+    } else {
+      logo.setAttribute("src", "images/card-icons/" + name + ".svg");
+      logo.setAttribute("alt", pm || "payment method");
+    }
   }
   logo.style.removeProperty("display");
 }
@@ -119,6 +135,15 @@ function setDefaultErrorIcon(el) {
 function setErrorIcon(el) {
   var logo = document.getElementById("icon-" + el + "-error");
   logo.style.setProperty("display", "block");
+}
+
+Frames.addEventHandler(
+  Frames.Events.FRAME_ACTIVATED,
+  frameActivated
+);
+function frameActivated() {
+  let container = document.querySelector(".icon-container.payment-method");
+  showPaymentMethodIcon(container, 'default')
 }
 
 Frames.addEventHandler(
@@ -179,6 +204,7 @@ function paymentMethodChanged(event) {
 
   if (!pm) {
     clearPaymentMethodIcon(container);
+    showPaymentMethodIcon(container, 'default')
   } else {
     clearErrorIcon("card-number");
     showPaymentMethodIcon(container, pm);
@@ -190,4 +216,3 @@ function onSubmit(event) {
   event.preventDefault();
   Frames.submitCard();
 }
-
