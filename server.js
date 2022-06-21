@@ -10,7 +10,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // app.use('/images', express.static(__dirname + '/images'));
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
+app.use('/', express.static(__dirname + '/public/single_frame'));
+app.use('/multi', express.static(__dirname + '/public/multi_iframes'));
 
 app.use('/', frontEnd);
 app.use('/api/payments', payments);
