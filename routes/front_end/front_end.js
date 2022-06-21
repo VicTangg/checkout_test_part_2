@@ -7,4 +7,9 @@ router.get('/success', (req, res) => {
     res.send(Buffer.from('<h2>payment success!</h2>'));
 });
 
+router.get('/failure', (req, res) => {
+    res.set('Content-Type', 'text/html');
+    res.send(Buffer.from('<h2>payment failure!</h2>'));
+});
+
 module.exports = router;

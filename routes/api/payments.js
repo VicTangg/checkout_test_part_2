@@ -48,8 +48,8 @@ router.post('/giropay', (req, res) => {
     },
     'amount': 2499,
     'currency': currencyType,
-    "success_url": "http://example.com/payments/success",
-    "failure_url": "http://example.com/payments/fail"
+    "success_url": "https://checkout-demo-victor.herokuapp.com/success",
+    "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
 }
 
 var config = {
