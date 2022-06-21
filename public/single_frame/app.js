@@ -151,8 +151,8 @@ function payAPM(apmMethod, currencyType = 'EUR'){
     "currencyType": currencyType
   };
 
-
-  fetch("http://localhost:5000/api/payments/giropay",
+  fetch("https://checkout-demo-victor.herokuapp.com/api/payments/giropay",
+  // fetch("http://localhost:5000/api/payments/giropay",
   {
       method: "POST",
       headers: {
