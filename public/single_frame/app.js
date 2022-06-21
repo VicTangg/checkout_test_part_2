@@ -4,6 +4,7 @@ var form = document.getElementById("payment-form");
 var errorStack = [];
 var paymentID;
 
+console.log(window.location.href)
 Frames.init({
   publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
   localization: "DE-DE"
