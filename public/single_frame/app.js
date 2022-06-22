@@ -4,7 +4,7 @@ var form = document.getElementById("payment-form");
 var errorStack = [];
 var paymentID;
 
-url_domain = window.location.href 
+var url_domain = window.location.href 
 
 Frames.init({
   publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",

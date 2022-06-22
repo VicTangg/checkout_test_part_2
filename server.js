@@ -13,8 +13,10 @@ app.use(bodyParser.json());
 // app.use(express.static(__dirname + '/public'));
 app.use('/', express.static(__dirname + '/public/single_frame'));
 app.use('/multi', express.static(__dirname + '/public/multi_iframes'));
+app.use('/success', express.static(__dirname + '/public/payment_success'));
+app.use('/failure', express.static(__dirname + '/public/payment_failure'));
 
-app.use('/', frontEnd);
+// app.use('/', frontEnd);
 app.use('/api/payments', payments);
 const port = process.env.PORT || 5000;
 

@@ -143,7 +143,9 @@ router.post('/', (req, res) => {
         },
         "3ds": {
           "enabled": true
-        }
+        },
+        "success_url": "https://checkout-demo-victor.herokuapp.com/success",
+        "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
     }
     
     var config = {
