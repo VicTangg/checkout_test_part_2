@@ -4,7 +4,8 @@ var form = document.getElementById("payment-form");
 var errorStack = [];
 var paymentID;
 
-console.log(window.location.href)
+url_domain = window.location.href 
+
 Frames.init({
   publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
   localization: "DE-DE"
@@ -84,7 +85,7 @@ function onCardTokenized(event) {
 
   if (threeDSChallenge === 'Y') {
     console.log("3ds")
-    fetch("http://localhost:5000/api/payments/3DS",
+    fetch(url_domain + "api/payments/3DS",
     {
         method: "POST",
         headers: {
@@ -105,7 +106,7 @@ function onCardTokenized(event) {
 
   } else {
     console.log("no_3ds")
-    fetch("http://localhost:5000/api/payments",
+    fetch(url_domain + "api/payments",
     {
         method: "POST",
         headers: {
@@ -152,8 +153,7 @@ function payAPM(apmMethod, currencyType = 'EUR'){
     "currencyType": currencyType
   };
 
-  fetch("https://checkout-demo-victor.herokuapp.com/api/payments/giropay",
-  // fetch("http://localhost:5000/api/payments/giropay",
+  fetch(url_domain + "api/payments/giropay",
   {
       method: "POST",
       headers: {
@@ -175,7 +175,7 @@ function checkPaymentStatus(){
     "paymentID": paymentID
   };
 
-  fetch("http://localhost:5000/api/payments/paymentStatus",
+  fetch(url_domain + "api/payments/paymentStatus",
   {
       method: "POST",
       headers: {
