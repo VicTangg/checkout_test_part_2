@@ -7,7 +7,7 @@ var paymentID;
 var url_domain = window.location.href 
 
 Frames.init({
-  publicKey: "pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
+  publicKey: "pk_test_052ae7e0-780a-451a-8254-418a8032859f",
   localization: "DE-DE"
 });
 
