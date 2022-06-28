@@ -2,9 +2,69 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
+var mySecretKey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
+
 router.get('/', (req, res) => {
   res.json('');
 });
+
+router.post('/hostedPaymentPage', (req, res) => {
+  var data =  {
+    "amount": 2499,
+    "currency": "EUR",
+    "billing": {
+      "address": {
+        "country": "DE"
+      }
+    },
+    "customer": {
+      "name": "Chan Tai Man",
+      "email": "chan.taiman@checkout.com"
+    },
+    "allow_payment_methods": [
+      "sofort",
+      "p24",
+      "giropay",
+      "card",
+      "ideal",
+      "eps",
+      "bancontact"
+    ],
+    "success_url": "https://checkout-demo-victor.herokuapp.com/success",
+    "failure_url": "https://checkout-demo-victor.herokuapp.com/failure",
+    "cancel_url": "https://checkout-demo-victor.herokuapp.com/failure"
+  }
+
+
+  var config = {
+    method: 'post',
+    url: 'https://api.sandbox.checkout.com/hosted-payments',
+    headers: {
+      'Authorization': mySecretKey,
+      'Content-Type': 'application/json'
+    },
+    data: data
+  };
+
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data['_links']['redirect']['href']));
+    // console.log(response.data.status)
+    // var paymentStatus = response.data.status;
+    // if (paymentStatus === 'Authorized')
+    res.status(200).json({
+      'success': true,
+      'redirectUrl': response.data['_links']['redirect']['href']
+    });
+  })
+  .catch(function (error) {
+    console.log(error);
+    // console.log('return')
+    res.status(404).json({'success': false})
+  });
+  
+
+})
 
 router.post('/paymentStatus', (req, res) => {
   var paymentID = req.body.paymentID
@@ -12,7 +72,7 @@ router.post('/paymentStatus', (req, res) => {
     method: 'get',
     url: 'https://api.sandbox.checkout.com/payments/' + paymentID,
     headers: {
-      'Authorization': 'sk_test_0b9b5db6-f223-49d0-b68f-f6643dd4f808',
+      'Authorization': mySecretKey,
       'Content-Type': 'application/json'
     }
   };
@@ -43,20 +103,39 @@ router.post('/giropay', (req, res) => {
 
   var data =  {
     'source': {
-      'type': apmMethod,
-      'purpose': 'Mens black t-shirt L'
+      'type': apmMethod
     },
     'amount': 2499,
     'currency': currencyType,
     "success_url": "https://checkout-demo-victor.herokuapp.com/success",
     "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
-}
+  }
+
+  if (apmMethod == 'giropay'){
+    data['source']['purpose'] = 'Mens black t-shirt L'
+  }
+  if (apmMethod == 'bancontact'){
+    data['source']['payment_country'] = 'BE'
+    data['source']['account_holder_name'] = 'Chan Tai Man'
+  }
+  if (apmMethod == 'ideal'){
+    data['source']['bic'] = 'INGBNL2A',
+    data['source']['description'] = 'orderid'
+  }
+  if (apmMethod == 'p24'){
+    data['source']['payment_country'] = 'PL'
+    data['source']['account_holder_name'] = 'Chan Tai Man'
+    data['source']['account_holder_email'] = 'abc@checkout.com'
+  }
+  if (apmMethod == 'eps'){
+    data['source']['purpose'] = 'Mens black t-shirt L'
+  }
 
 var config = {
   method: 'post',
   url: 'https://api.sandbox.checkout.com/payments',
   headers: {
-    'Authorization': 'sk_test_0b9b5db6-f223-49d0-b68f-f6643dd4f808',
+    'Authorization': mySecretKey,
     'Content-Type': 'application/json'
   },
   data : data
@@ -102,7 +181,7 @@ router.post('/', (req, res) => {
     method: 'post',
     url: 'https://api.sandbox.checkout.com/payments',
     headers: {
-      'Authorization': 'sk_test_0b9b5db6-f223-49d0-b68f-f6643dd4f808',
+      'Authorization': mySecretKey,
       'Content-Type': 'application/json'
     },
     data : data
@@ -152,7 +231,7 @@ router.post('/', (req, res) => {
       method: 'post',
       url: 'https://api.sandbox.checkout.com/payments',
       headers: {
-        'Authorization': 'sk_test_0b9b5db6-f223-49d0-b68f-f6643dd4f808',
+        'Authorization': mySecretKey,
         'Content-Type': 'application/json'
       },
       data : data

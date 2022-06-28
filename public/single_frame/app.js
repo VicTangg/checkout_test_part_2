@@ -147,6 +147,29 @@ form.addEventListener("submit", function (event) {
   Frames.submitCard();
 });
 
+function payHPP(){
+  // var payload = {
+  //   "apmMethod": apmMethod,
+  //   "currencyType": currencyType
+  // };
+
+  fetch(url_domain + "api/payments/hostedPaymentPage",
+  {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      }
+      // body: JSON.stringify(payload)
+    })
+  .then(response => response.json())
+  .then(function(data){
+    console.log(data)
+    location.assign(data['redirectUrl'])
+  })
+
+  console.log('I am here')
+}
+
 function payAPM(apmMethod, currencyType = 'EUR'){
   var payload = {
     "apmMethod": apmMethod,
