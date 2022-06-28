@@ -210,15 +210,15 @@ router.post('/', (req, res) => {
     console.log(req.body.token);
     /* Code here */
     var data =  {
-        'source': {
-          'type': 'token',
-          'token': req.body.token
+        "source": {
+          "type": "token",
+          "token": req.body.token
         },
-        'amount': 2499,
-        'currency': 'EUR',
-        'reference': 'ORD-5023-4E89',
-        'customer': {
-          'email': 'john.smith@example.com'
+        "amount": 2499,
+        "currency": "EUR",
+        "reference": "ORD-5023-4E89",
+        "customer": {
+          "email": "john.smith@example.com"
         },
         "3ds": {
           "enabled": true
@@ -227,6 +227,7 @@ router.post('/', (req, res) => {
         "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
     }
     
+    console.log(data)
     var config = {
       method: 'post',
       url: 'https://api.sandbox.checkout.com/payments',
