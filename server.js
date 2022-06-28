@@ -1,9 +1,10 @@
-const path = require("path")
+// const path = require("path")
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const payments = require('./routes/api/payments');
-const frontEnd = require('./routes/front_end/front_end');
+const webhooks = require('./routes/api/webhooks');
+// const frontEnd = require('./routes/front_end/front_end');
 
 const app = express();
 app.use(cors());
@@ -18,6 +19,7 @@ app.use('/failure', express.static(__dirname + '/public/payment_failure'));
 
 // app.use('/', frontEnd);
 app.use('/api/payments', payments);
+app.use('/api/webhooks', webhooks);
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
