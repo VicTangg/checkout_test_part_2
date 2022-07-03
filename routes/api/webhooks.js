@@ -17,9 +17,12 @@ router.get('/payment-captured', (req, res) => {
 router.post('/payment-captured', (req, res) => {
     if (req.body["type"] == "payment_captured"){
         console.log('received payment captured webhook')
+        console.log()
     }
     if (req.body["type"] == "payment_approved"){
         console.log('received payment approved webhook')
+        console.log('source id')
+        console.log(req.body["data"]["source"]["id"])
     }
     console.log("")
     console.log("")

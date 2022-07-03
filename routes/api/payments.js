@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-var mySecretKey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
+var myMBCSecretkey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
 
 router.get('/', (req, res) => {
   res.json('');
@@ -40,7 +40,7 @@ router.post('/hostedPaymentPage', (req, res) => {
     method: 'post',
     url: 'https://api.sandbox.checkout.com/hosted-payments',
     headers: {
-      'Authorization': mySecretKey,
+      'Authorization': myMBCSecretkey,
       'Content-Type': 'application/json'
     },
     data: data
@@ -72,7 +72,7 @@ router.post('/paymentStatus', (req, res) => {
     method: 'get',
     url: 'https://api.sandbox.checkout.com/payments/' + paymentID,
     headers: {
-      'Authorization': mySecretKey,
+      'Authorization': myMBCSecretkey,
       'Content-Type': 'application/json'
     }
   };
@@ -101,10 +101,14 @@ router.post('/giropay', (req, res) => {
   apmMethod = req.body.apmMethod
   currencyType = req.body.currencyType
 
+  const crypto = require('crypto')
+  referenceID = crypto.randomUUID()
+
   var data =  {
     'source': {
       'type': apmMethod
     },
+    "reference": referenceID,
     'amount': 2499,
     'currency': currencyType,
     "success_url": "https://checkout-demo-victor.herokuapp.com/success",
@@ -130,12 +134,15 @@ router.post('/giropay', (req, res) => {
   if (apmMethod == 'eps'){
     data['source']['purpose'] = 'Mens black t-shirt L'
   }
+  if (apmMethod == 'paypal'){
+    data['source']['invoice_number'] = referenceID
+  }
 
 var config = {
   method: 'post',
   url: 'https://api.sandbox.checkout.com/payments',
   headers: {
-    'Authorization': mySecretKey,
+    'Authorization': myMBCSecretkey,
     'Content-Type': 'application/json'
   },
   data : data
@@ -181,7 +188,7 @@ router.post('/', (req, res) => {
     method: 'post',
     url: 'https://api.sandbox.checkout.com/payments',
     headers: {
-      'Authorization': mySecretKey,
+      'Authorization': myMBCSecretkey,
       'Content-Type': 'application/json'
     },
     data : data
@@ -232,7 +239,7 @@ router.post('/', (req, res) => {
       method: 'post',
       url: 'https://api.sandbox.checkout.com/payments',
       headers: {
-        'Authorization': mySecretKey,
+        'Authorization': myMBCSecretkey,
         'Content-Type': 'application/json'
       },
       data : data

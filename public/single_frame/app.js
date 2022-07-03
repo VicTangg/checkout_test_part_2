@@ -5,9 +5,11 @@ var errorStack = [];
 var paymentID;
 
 var url_domain = window.location.href 
+var myPublicKey = "pk_test_052ae7e0-780a-451a-8254-418a8032859f"
+
 
 Frames.init({
-  publicKey: "pk_test_052ae7e0-780a-451a-8254-418a8032859f",
+  publicKey: myPublicKey,
   localization: "DE-DE"
 });
 
