@@ -3,6 +3,7 @@ const axios = require('axios');
 const router = express.Router();
 
 var myMBCSecretkey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
+var myNASSecretKey = 'sk_sbox_7p6tqoqk7wvdvlavv555jmiewyu'
 
 router.get('/', (req, res) => {
   res.json('');
@@ -68,6 +69,7 @@ router.post('/hostedPaymentPage', (req, res) => {
 
 router.post('/paymentStatus', (req, res) => {
   var paymentID = req.body.paymentID
+
   var config = {
     method: 'get',
     url: 'https://api.sandbox.checkout.com/payments/' + paymentID,
@@ -137,33 +139,57 @@ router.post('/giropay', (req, res) => {
   if (apmMethod == 'paypal'){
     data['source']['invoice_number'] = referenceID
   }
+  if (apmMethod == 'alipay_hk' || apmMethod == 'alipay_cn'){
+    data['processing'] = {
+      "terminal_type": "WEB",
+      "os_type": "ANDROID"
+    }
+    data['payment_type'] = 'Regular'
+    data['customer'] = {
+      "name": "vincent tang",
+      "email": "victor.tang@checkout.com"
+    }
+    data['processing_channel_id'] = "pc_kh6ijma7qxiuhamlmmtovfdnoq"
+    data['items'] = [
+      {
+        "reference": "cko10001",
+        "name": "Apple",
+        "unit_price": 10,
+        "quantity": 1
+      }
+    ]
+  }
 
-var config = {
-  method: 'post',
-  url: 'https://api.sandbox.checkout.com/payments',
-  headers: {
-    'Authorization': myMBCSecretkey,
-    'Content-Type': 'application/json'
-  },
-  data : data
-};
+  var config = {
+    method: 'post',
+    url: 'https://api.sandbox.checkout.com/payments',
+    headers: {
+      'Authorization': myMBCSecretkey,
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
 
-axios(config)
-.then(function (response) {
-  console.log(JSON.stringify(response.data['_links']['redirect']['href']));
-  // console.log(response.data.status)
-  // var paymentStatus = response.data.status;
-  // if (paymentStatus === 'Authorized')
-  res.status(200).json({
-    'success': true,
-    'redirectUrl': response.data['_links']['redirect']['href']
+  if (apmMethod == 'alipay_hk' || apmMethod == 'alipay_cn'){
+    config['headers']['Authorization'] = 'Bearer ' + myNASSecretKey
+  }
+
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data['_links']['redirect']['href']));
+    // console.log(response.data.status)
+    // var paymentStatus = response.data.status;
+    // if (paymentStatus === 'Authorized')
+    res.status(200).json({
+      'success': true,
+      'redirectUrl': response.data['_links']['redirect']['href']
+    });
+  })
+  .catch(function (error) {
+    console.log(error);
+    // console.log('return')
+    res.status(404).json({'success': false})
   });
-})
-.catch(function (error) {
-  console.log(error);
-  // console.log('return')
-  res.status(404).json({'success': false})
-});
 
 
 })
