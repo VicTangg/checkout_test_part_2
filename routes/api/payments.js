@@ -34,7 +34,7 @@ router.post('/validateSession', async (req, res) => {
       appleUrl,
       {
         merchantIdentifier: 'merchant.com.herokuapp.checkout-demo-victor',
-        domainName: 'f630-123-203-23-156.ap.ngrok.io',
+        domainName: 'checkout-demo-victor.herokuapp.com',
         displayName: 'Victor Tang Limited',
       },
       {
