@@ -34,7 +34,7 @@ appleButton.addEventListener("click", function(){
     currencyCode: "USD",
     supportedNetworks: ["visa", "masterCard", "amex", "discover"],
     merchantCapabilities: ["supports3DS"],
-    total: {label: "Amazing Shop", amount: "10.00"}
+    total: {label: "Amazing Shop", amount: "24.99"}
   });
   applePaySession.begin();
 
@@ -57,6 +57,27 @@ appleButton.addEventListener("click", function(){
     console.log(applePaymentToken)
     console.log("Apple pay authorized")
 
+    // Back end logic to create payment
+      var payload = {
+        "token": applePaymentToken
+      };
+      console.log(payload)
+      console.log(JSON.stringify(applePaymentToken.paymentData))
+      fetch(url_domain + "api/payments/applepay",
+      {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)          
+        })
+      .then(response => response.json())
+      .then(function(data){
+        applePaySession.completePayment(ApplePaySession.STATUS_SUCCESS)
+      })
+      .catch((error) => {
+        applePaySession.completePayment(ApplePaySession.STATUS_FAILURE)
+      })
   }
 
 })
@@ -77,20 +98,6 @@ var validateTheSession = function(theValidationURL, callback) {
 
 }
 
-
-// if (window.ApplePaySession) {
-//    window.alert('hello apple pay')
-
-//    var merchantIdentifier = 'merchant.com.herokuapp.checkout-demo-victor';
-//    var promise = ApplePaySession.canMakePaymentsWithActiveCard(merchantIdentifier);
-//    promise.then(function (canMakePayments) {
-//     console.log(canMakePayments)
-//       if (canMakePayments){
-//         window.alert('hello apple pay')
-//          // Display Apple Pay button here.
-//          console.log('abc')
-//       }
-// }); }
 
 Frames.init({
   publicKey: myPublicKey,

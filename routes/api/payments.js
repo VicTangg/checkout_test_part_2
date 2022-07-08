@@ -3,10 +3,12 @@ const axios = require('axios');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path')
-const https = require('https')
+const https = require('https');
+const { Console } = require('console');
 
 var myMBCSecretkey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
 var myNASSecretKey = 'sk_sbox_7p6tqoqk7wvdvlavv555jmiewyu'
+var myNASPublicKey = 'pk_sbox_ddaz7g6hhgnbhklmyxzr7n5yzme'
 
 router.get('/', (req, res) => {
   // console.log(path.join(__dirname, '/certificates/certificate_sandbox.key'))
@@ -20,7 +22,7 @@ router.post('/validateSession', async (req, res) => {
   console.log(appleUrl)
   console.log("validating apple session")
   // use set the certificates for the POST request
-  try{
+  try {
     console.log("I'm here")
     let = httpsAgent = new https.Agent({
       rejectUnauthorized: false,
@@ -31,24 +33,22 @@ router.post('/validateSession', async (req, res) => {
     let response = await axios.post(
       appleUrl,
       {
-          merchantIdentifier: 'merchant.com.herokuapp.checkout-demo-victor',
-          domainName: 'checkout-demo-victor.herokuapp.com',
-          displayName: 'Victor Tang Limited',
+        merchantIdentifier: 'merchant.com.herokuapp.checkout-demo-victor',
+        domainName: 'f630-123-203-23-156.ap.ngrok.io',
+        displayName: 'Victor Tang Limited',
       },
       {
-          httpsAgent,
+        httpsAgent,
       }
-  );
-  console.log("succeeded")
-  res.send(response.data);
-  } catch (er){
-    console.log('I am failed')
+    );
+    res.send(response.data);
+  } catch (er) {
     res.send(er)
   }
 });
 
 router.post('/hostedPaymentPage', (req, res) => {
-  var data =  {
+  var data = {
     "amount": 2499,
     "currency": "EUR",
     "billing": {
@@ -86,22 +86,22 @@ router.post('/hostedPaymentPage', (req, res) => {
   };
 
   axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data['_links']['redirect']['href']));
-    // console.log(response.data.status)
-    // var paymentStatus = response.data.status;
-    // if (paymentStatus === 'Authorized')
-    res.status(200).json({
-      'success': true,
-      'redirectUrl': response.data['_links']['redirect']['href']
+    .then(function (response) {
+      console.log(JSON.stringify(response.data['_links']['redirect']['href']));
+      // console.log(response.data.status)
+      // var paymentStatus = response.data.status;
+      // if (paymentStatus === 'Authorized')
+      res.status(200).json({
+        'success': true,
+        'redirectUrl': response.data['_links']['redirect']['href']
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+      // console.log('return')
+      res.status(404).json({ 'success': false })
     });
-  })
-  .catch(function (error) {
-    console.log(error);
-    // console.log('return')
-    res.status(404).json({'success': false})
-  });
-  
+
 
 })
 
@@ -118,22 +118,22 @@ router.post('/paymentStatus', (req, res) => {
   };
 
   axios(config)
-  .then(function (response) {
-    var status = response.data['status'] 
-    console.log(status);
-    // console.log(response.data.status)
-    // var paymentStatus = response.data.status;
-    // if (paymentStatus === 'Authorized')
-    res.status(200).json({
-      'success': true,
-      'paymentStatus': status
+    .then(function (response) {
+      var status = response.data['status']
+      console.log(status);
+      // console.log(response.data.status)
+      // var paymentStatus = response.data.status;
+      // if (paymentStatus === 'Authorized')
+      res.status(200).json({
+        'success': true,
+        'paymentStatus': status
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+      // console.log('return')
+      res.status(404).json({ 'success': false })
     });
-  })
-  .catch(function (error) {
-    console.log(error);
-    // console.log('return')
-    res.status(404).json({'success': false})
-  });
 })
 
 
@@ -144,7 +144,7 @@ router.post('/giropay', (req, res) => {
   const crypto = require('crypto')
   referenceID = crypto.randomUUID()
 
-  var data =  {
+  var data = {
     'source': {
       'type': apmMethod
     },
@@ -155,29 +155,29 @@ router.post('/giropay', (req, res) => {
     "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
   }
 
-  if (apmMethod == 'giropay'){
+  if (apmMethod == 'giropay') {
     data['source']['purpose'] = 'Mens black t-shirt L'
   }
-  if (apmMethod == 'bancontact'){
+  if (apmMethod == 'bancontact') {
     data['source']['payment_country'] = 'BE'
     data['source']['account_holder_name'] = 'Chan Tai Man'
   }
-  if (apmMethod == 'ideal'){
+  if (apmMethod == 'ideal') {
     data['source']['bic'] = 'INGBNL2A',
-    data['source']['description'] = 'orderid'
+      data['source']['description'] = 'orderid'
   }
-  if (apmMethod == 'p24'){
+  if (apmMethod == 'p24') {
     data['source']['payment_country'] = 'PL'
     data['source']['account_holder_name'] = 'Chan Tai Man'
     data['source']['account_holder_email'] = 'abc@checkout.com'
   }
-  if (apmMethod == 'eps'){
+  if (apmMethod == 'eps') {
     data['source']['purpose'] = 'Mens black t-shirt L'
   }
-  if (apmMethod == 'paypal'){
+  if (apmMethod == 'paypal') {
     data['source']['invoice_number'] = referenceID
   }
-  if (apmMethod == 'alipay_hk' || apmMethod == 'alipay_cn'){
+  if (apmMethod == 'alipay_hk' || apmMethod == 'alipay_cn') {
     data['processing'] = {
       "terminal_type": "WEB",
       "os_type": "ANDROID"
@@ -205,29 +205,29 @@ router.post('/giropay', (req, res) => {
       'Authorization': myMBCSecretkey,
       'Content-Type': 'application/json'
     },
-    data : data
+    data: data
   };
 
-  if (apmMethod == 'alipay_hk' || apmMethod == 'alipay_cn'){
+  if (apmMethod == 'alipay_hk' || apmMethod == 'alipay_cn') {
     config['headers']['Authorization'] = 'Bearer ' + myNASSecretKey
   }
 
   axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data['_links']['redirect']['href']));
-    // console.log(response.data.status)
-    // var paymentStatus = response.data.status;
-    // if (paymentStatus === 'Authorized')
-    res.status(200).json({
-      'success': true,
-      'redirectUrl': response.data['_links']['redirect']['href']
+    .then(function (response) {
+      console.log(JSON.stringify(response.data['_links']['redirect']['href']));
+      // console.log(response.data.status)
+      // var paymentStatus = response.data.status;
+      // if (paymentStatus === 'Authorized')
+      res.status(200).json({
+        'success': true,
+        'redirectUrl': response.data['_links']['redirect']['href']
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+      // console.log('return')
+      res.status(404).json({ 'success': false })
     });
-  })
-  .catch(function (error) {
-    console.log(error);
-    // console.log('return')
-    res.status(404).json({'success': false})
-  });
 
 
 })
@@ -235,19 +235,19 @@ router.post('/giropay', (req, res) => {
 router.post('/', (req, res) => {
   console.log(req.body.token);
   /* Code here */
-  var data =  {
-      'source': {
-        'type': 'token',
-        'token': req.body.token
-      },
-      'amount': 2499,
-      'currency': 'EUR',
-      'reference': 'ORD-5023-4E89',
-      'customer': {
-        'email': 'john.smith@example.com'
-      }
+  var data = {
+    'source': {
+      'type': 'token',
+      'token': req.body.token
+    },
+    'amount': 2499,
+    'currency': 'EUR',
+    'reference': 'ORD-5023-4E89',
+    'customer': {
+      'email': 'john.smith@example.com'
+    }
   }
-  
+
   var config = {
     method: 'post',
     url: 'https://api.sandbox.checkout.com/payments',
@@ -255,66 +255,67 @@ router.post('/', (req, res) => {
       'Authorization': myMBCSecretkey,
       'Content-Type': 'application/json'
     },
-    data : data
+    data: data
   };
-  
+
   axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data));
-    console.log(response.data.status)
-    var paymentStatus = response.data.status;
-    if (paymentStatus === 'Authorized' || paymentStatus === 'Captured')
-      res.status(200).json(
-        {
-          'success': true,
-          'paymentID': response.data.id
-        }
-        );
-  })
-  .catch(function (error) {
-    console.log(error);
-    console.log('return')
-    res.status(200).json({'success': false})
-  });
-    
-  router.post('/3DS', (req, res) => {
-    console.log(req.body.token);
-    /* Code here */
-    var data =  {
-        "source": {
-          "type": "token",
-          "token": req.body.token
-        },
-        "amount": 2499,
-        "currency": "EUR",
-        "reference": "ORD-5023-4E89",
-        "customer": {
-          "email": "john.smith@example.com"
-        },
-        "3ds": {
-          "enabled": true
-        },
-        "success_url": "https://checkout-demo-victor.herokuapp.com/success",
-        "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
-    }
-    
-    console.log(data)
-    var config = {
-      method: 'post',
-      url: 'https://api.sandbox.checkout.com/payments',
-      headers: {
-        'Authorization': myMBCSecretkey,
-        'Content-Type': 'application/json'
-      },
-      data : data
-    };
-    
-    axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
       console.log(response.data.status)
       var paymentStatus = response.data.status;
-      if (paymentStatus === 'Authorized'){
+      if (paymentStatus === 'Authorized' || paymentStatus === 'Captured')
+        res.status(200).json(
+          {
+            'success': true,
+            'paymentID': response.data.id
+          }
+        );
+    })
+    .catch(function (error) {
+      console.log(error);
+      console.log('return')
+      res.status(200).json({ 'success': false })
+    });
+});
+
+router.post('/3DS', (req, res) => {
+  console.log(req.body.token);
+  /* Code here */
+  var data = {
+    "source": {
+      "type": "token",
+      "token": req.body.token
+    },
+    "amount": 2499,
+    "currency": "EUR",
+    "reference": "ORD-5023-4E89",
+    "customer": {
+      "email": "john.smith@example.com"
+    },
+    "3ds": {
+      "enabled": true
+    },
+    "success_url": "https://checkout-demo-victor.herokuapp.com/success",
+    "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
+  }
+
+  console.log(data)
+  var config = {
+    method: 'post',
+    url: 'https://api.sandbox.checkout.com/payments',
+    headers: {
+      'Authorization': myMBCSecretkey,
+      'Content-Type': 'application/json'
+    },
+    data: data
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      console.log(response.data.status)
+      var paymentStatus = response.data.status;
+      if (paymentStatus === 'Authorized') {
         res.status(200).json({
           'success': true
         });
@@ -323,24 +324,101 @@ router.post('/', (req, res) => {
           'success': true,
           '3ds_redirect': response.data['_links']['redirect']['href']
         });
-        
+
       }
     })
     .catch(function (error) {
       console.log(error);
       console.log('return')
-      res.status(200).json({'success': false})
+      res.status(200).json({ 'success': false })
     });
-      
-  
-  
-  
-  
-  });
-
-
-
 });
+
+
+router.post('/applepay', (req, res) => {
+
+  // console.log(req.body.token)
+  const {version, data, signature, header} = req.body.token.paymentData;
+  // Exchange Apple Token with cko token
+  var ckoToken;
+  var req_data = {
+    "type": "applepay",
+    "token_data": {
+      "version":1,
+      "data": data,
+      "signature": signature,
+      "header": {
+        "ephemeralPublicKey": header.ephemeralPublicKey,
+        "publicKeyHash": header.publicKeyHash,
+        "transactionId": header.transactionId
+      }
+    }
+  }  
+
+  var config = {
+    method: 'post',
+    url: 'https://api.sandbox.checkout.com/tokens',
+    headers: {
+      'Authorization': 'Bearer ' + myNASPublicKey,
+      'Content-Type': 'application/json'
+    },
+    data: req_data
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log("token exchange succeeded")
+      console.log(response)
+
+      ckoToken = response.data.token
+      console.log(ckoToken)
+      console.log("cko token is here")
+
+      // Make payment request with cko token
+      req_data = {
+        'source': {
+          'type': 'token',
+          'token': ckoToken
+        },
+        'amount': 2499,
+        'currency': 'USD',
+        'reference': 'ORD-5023-4E89',
+        'customer': {
+          'email': 'john.smith@example.com'
+        }
+      }
+
+      var config = {
+        method: 'post',
+        url: 'https://api.sandbox.checkout.com/payments',
+        headers: {
+          'Authorization': 'Bearer ' + myNASSecretKey,
+          'Content-Type': 'application/json'
+        },
+        data: req_data
+      };
+    
+      axios(config)
+        .then(function (response) {
+          console.log(response.data.status)
+          var paymentStatus = response.data.status;
+          if (paymentStatus === 'Authorized' || paymentStatus === 'Captured')
+            res.status(200).json(
+              {
+                'success': true,
+                'paymentID': response.data.id
+              }
+            );
+        })
+        .catch(function (error) {
+          console.log('Failed')
+          res.status(200).json({ 'success': false })
+        });
+    })
+    .catch(function (error) {
+      console.log("Apple Pay token exchange failed");
+    });
+})
 
 
 
