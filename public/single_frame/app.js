@@ -52,6 +52,9 @@ appleButton.addEventListener("click", function(){
 
   // Second event triggered on authorized
   applePaySession.onpaymentauthorized = function(event){
+    var applePaymentToken = event.payment.token;
+
+    console.log(applePaymentToken)
     console.log("Apple pay authorized")
 
   }
