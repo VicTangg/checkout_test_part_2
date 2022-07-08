@@ -45,6 +45,7 @@ appleButton.addEventListener("click", function(){
     console.log(theValidationURL)
     validateTheSession(theValidationURL, function(merchantSession){
       console.log('url validated')
+      console.log(merchantSession)
       applePaySession.completeMerchantValidation(merchantSession)
     })
   }

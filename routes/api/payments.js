@@ -1,12 +1,17 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path')
+const https = require('https')
 
 var myMBCSecretkey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
 var myNASSecretKey = 'sk_sbox_7p6tqoqk7wvdvlavv555jmiewyu'
 
 router.get('/', (req, res) => {
-  res.json('');
+  // console.log(path.join(__dirname, '/certificates/certificate_sandbox.key'))
+  // var cert = fs.readFileSync(path.join(__dirname, '/certificates/certificate_sandbox.key'));
+  res.json("abc");
 });
 
 
@@ -17,26 +22,27 @@ router.post('/validateSession', async (req, res) => {
   // use set the certificates for the POST request
   try{
     console.log("I'm here")
-    let httpsAgent = new https.Agent({
+    let = httpsAgent = new https.Agent({
       rejectUnauthorized: false,
-      cert: fs.readFileSync(path.join(__dirname, './certificate.pem')),
-      key: fs.readFileSync(path.join(__dirname, './sandbox.key')),
+      cert: await fs.readFileSync(path.join(__dirname, '/certificates/certificate_sandbox.pem')),
+      key: fs.readFileSync(path.join(__dirname, '/certificates/certificate_sandbox.key')),
     });
-    console.log(httpsAgent)
+    console.log('i am here 2')
     let response = await axios.post(
       appleUrl,
       {
           merchantIdentifier: 'merchant.com.herokuapp.checkout-demo-victor',
-          domainName: 'https://checkout-demo-victor.herokuapp.com/',
+          domainName: 'checkout-demo-victor.herokuapp.com/',
           displayName: 'Victor Tang Limited',
       },
       {
           httpsAgent,
       }
   );
-  console.log(response)
+  console.log("succeeded")
   res.send(response.data);
   } catch (er){
+    console.log('I am failed')
     res.send(er)
   }
 });
