@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout Frames v2: Single Frame</title>
@@ -10,7 +9,6 @@
   </head>
 
   <body>
-    <!-- <div><apple-pay-button buttonstyle="black" type="buy" locale="el-GR"></apple-pay-button> -->
     <a href="../multi">multi frame demo</a>
     <br/>
       <img src="./logo.png" alt="logo">
@@ -171,7 +169,10 @@
       </tr>
       <tr><td><br/></td></tr>
       <tr>
-          <td><div class="apple-pay_button">        <div><apple-pay-button buttonstyle="black" type="buy" locale="el-GR"></apple-pay-button></div>
+          <td>
+            <div class="apple-pay-button" style="display: none;"></div>
+            <br/>
+            <!-- <apple-pay-button buttonstyle="black" type="buy" locale="en-US"></apple-pay-button></div> -->
           </div>
         </td>
       </tr>
@@ -179,6 +180,7 @@
   </table>
     <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
     <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

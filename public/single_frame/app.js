@@ -8,6 +8,86 @@ var url_domain = window.location.href
 var myPublicKey = "pk_test_052ae7e0-780a-451a-8254-418a8032859f"
 
 
+// axios.get('https://6f44-123-203-23-156.ap.ngrok.io/api/payments').then(resp => {
+
+//     console.log("abc");
+// });
+
+// Apple Pay
+var merchantIdentifier = 'merchant.com.herokuapp.checkout-demo-victor';
+var BACKEND_URL_VALIDATE_SESSION = window.location.href + "api/payments/validateSession";
+// https://6f44-123-203-23-156.ap.ngrok.io/validateSession
+var BACKEND_URL_PAY = window.location.href + "pay"
+// https://6f44-123-203-23-156.ap.ngrok.io/pay
+var appleButton = document.querySelector(".apple-pay-button")
+
+if (
+  window.ApplePaySession && 
+  ApplePaySession.canMakePaymentsWithActiveCard(merchantIdentifier)
+  ){
+    appleButton.style.display = "block";
+  }
+
+appleButton.addEventListener("click", function(){
+  var applePaySession = new ApplePaySession(6, {
+    countryCode: "US",
+    currencyCode: "USD",
+    supportedNetworks: ["visa", "masterCard", "amex", "discover"],
+    merchantCapabilities: ["supports3DS"],
+    total: {label: "Amazing Shop", amount: "10.00"}
+  });
+  applePaySession.begin();
+
+  // First event, validate apple pay session from back
+  applePaySession.onvalidatemerchant = function(event) {
+    console.log("Apple pay validating")
+    var theValidationURL = event.validationURL;
+    console.log(theValidationURL)
+    validateTheSession(theValidationURL, function(merchantSession){
+      console.log('url validated')
+      applePaySession.completeMerchantValidation(merchantSession)
+    })
+  }
+
+  // Second event triggered on authorized
+  applePaySession.onpaymentauthorized = function(event){
+    console.log("Apple pay authorized")
+
+  }
+
+})
+
+var validateTheSession = function(theValidationURL, callback) {
+  console.log(BACKEND_URL_VALIDATE_SESSION)
+  axios.post(BACKEND_URL_VALIDATE_SESSION,
+    {
+      appleUrl: theValidationURL
+    },
+    {
+      headers:{
+        "Access-Control-Allow-Origin": "*"
+      }
+    }).then(function(response){
+      callback(response.data)
+    })
+
+}
+
+
+// if (window.ApplePaySession) {
+//    window.alert('hello apple pay')
+
+//    var merchantIdentifier = 'merchant.com.herokuapp.checkout-demo-victor';
+//    var promise = ApplePaySession.canMakePaymentsWithActiveCard(merchantIdentifier);
+//    promise.then(function (canMakePayments) {
+//     console.log(canMakePayments)
+//       if (canMakePayments){
+//         window.alert('hello apple pay')
+//          // Display Apple Pay button here.
+//          console.log('abc')
+//       }
+// }); }
+
 Frames.init({
   publicKey: myPublicKey,
   localization: "DE-DE"

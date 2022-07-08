@@ -9,6 +9,38 @@ router.get('/', (req, res) => {
   res.json('');
 });
 
+
+router.post('/validateSession', async (req, res) => {
+  const { appleUrl } = req.body;
+  console.log(appleUrl)
+  console.log("validating apple session")
+  // use set the certificates for the POST request
+  try{
+    console.log("I'm here")
+    let httpsAgent = new https.Agent({
+      rejectUnauthorized: false,
+      cert: fs.readFileSync(path.join(__dirname, './certificate.pem')),
+      key: fs.readFileSync(path.join(__dirname, './sandbox.key')),
+    });
+    console.log(httpsAgent)
+    let response = await axios.post(
+      appleUrl,
+      {
+          merchantIdentifier: 'merchant.com.herokuapp.checkout-demo-victor',
+          domainName: 'https://checkout-demo-victor.herokuapp.com/',
+          displayName: 'Victor Tang Limited',
+      },
+      {
+          httpsAgent,
+      }
+  );
+  console.log(response)
+  res.send(response.data);
+  } catch (er){
+    res.send(er)
+  }
+});
+
 router.post('/hostedPaymentPage', (req, res) => {
   var data =  {
     "amount": 2499,
