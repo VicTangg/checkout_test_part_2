@@ -6,9 +6,17 @@ const path = require('path')
 const https = require('https');
 const { Console } = require('console');
 
-var myMBCSecretkey = 'sk_test_66d5b639-23bb-4ffa-ac0d-26a309fa8923';
-var myNASSecretKey = 'sk_sbox_7p6tqoqk7wvdvlavv555jmiewyu'
+// Take away the keys
+// Webhook
+// Appearance of the page
+// IP Address
+// Display the request and response
+// Add some button to Approve decline dispute
+
+var myMBCSecretkey = process.env.myMBCSecretkey;
+var myNASSecretKey = process.env.myNASSecretKey
 var myNASPublicKey = 'pk_sbox_ddaz7g6hhgnbhklmyxzr7n5yzme'
+
 
 router.get('/', (req, res) => {
   // console.log(path.join(__dirname, '/certificates/certificate_sandbox.key'))
