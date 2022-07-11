@@ -74,12 +74,10 @@ appleButton.addEventListener("click", function(){
       .then(response => response.json())
       .then(function(data){
         applePaySession.completePayment(ApplePaySession.STATUS_SUCCESS)
-        await delay(3000);
         location.assign(url_domain + 'success')
       })
       .catch((error) => {
         applePaySession.completePayment(ApplePaySession.STATUS_FAILURE)
-        await delay(3000);        
         location.assign(url_domain + 'failure')
       })
   }
