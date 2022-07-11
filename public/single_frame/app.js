@@ -74,9 +74,11 @@ appleButton.addEventListener("click", function(){
       .then(response => response.json())
       .then(function(data){
         applePaySession.completePayment(ApplePaySession.STATUS_SUCCESS)
+        location.assign(url_domain + 'success')
       })
       .catch((error) => {
         applePaySession.completePayment(ApplePaySession.STATUS_FAILURE)
+        location.assign(url_domain + 'failure')
       })
   }
 
