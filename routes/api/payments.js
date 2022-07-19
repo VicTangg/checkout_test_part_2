@@ -6,12 +6,6 @@ const path = require('path')
 const https = require('https');
 const { Console } = require('console');
 
-// Take away the keys
-// Webhook
-// Appearance of the page
-// IP Address
-// Display the request and response
-// Add some button to Approve decline dispute
 
 var myMBCSecretkey = process.env.myMBCSecretkey;
 var myNASSecretKey = process.env.myNASSecretKey
@@ -68,6 +62,7 @@ router.post('/hostedPaymentPage', (req, res) => {
       "name": "Chan Tai Man",
       "email": "chan.taiman@checkout.com"
     },
+    "payment_ip": req.body.cardholderIP,
     "allow_payment_methods": [
       "sofort",
       "p24",
@@ -157,6 +152,7 @@ router.post('/giropay', (req, res) => {
       'type': apmMethod
     },
     "reference": referenceID,
+    "payment_ip": req.body.cardholderIP,
     'amount': 2499,
     'currency': currencyType,
     "success_url": "https://checkout-demo-victor.herokuapp.com/success",
@@ -248,10 +244,12 @@ router.post('/', (req, res) => {
       'type': 'token',
       'token': req.body.token
     },
+    'payment_ip': req.body.cardholderIP,
     'amount': 2499,
     'currency': 'EUR',
     'reference': 'ORD-5023-4E89',
     'customer': {
+      'name': 'john smith',
       'email': 'john.smith@example.com'
     }
   }
@@ -295,9 +293,11 @@ router.post('/3DS', (req, res) => {
       "token": req.body.token
     },
     "amount": 2499,
+    'payment_ip': req.body.cardholderIP,
     "currency": "EUR",
     "reference": "ORD-5023-4E89",
     "customer": {
+      'name': 'john smith',
       "email": "john.smith@example.com"
     },
     "3ds": {
@@ -388,10 +388,12 @@ router.post('/applepay', (req, res) => {
           'type': 'token',
           'token': ckoToken
         },
+        'payment_ip': req.body.cardholderIP,
         'amount': 2499,
         'currency': 'USD',
         'reference': 'ORD-5023-4E89',
         'customer': {
+          'name': 'john smith',
           'email': 'john.smith@example.com'
         }
       }

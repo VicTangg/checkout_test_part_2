@@ -6,12 +6,18 @@ var paymentID;
 
 var url_domain = window.location.href 
 var myPublicKey = "pk_test_052ae7e0-780a-451a-8254-418a8032859f"
+var myIPDataKey = "263994c8926a8cfd56041c3ab982cbe2a3461d95ee5bb1791801bbc2"
+var cardholderIP;
 
+function json(url) {
+  return fetch(url).then(res => res.json());
+}
 
-// axios.get('https://6f44-123-203-23-156.ap.ngrok.io/api/payments').then(resp => {
+json(`https://api.ipdata.co?api-key=${myIPDataKey}`).then(data => {
+  cardholderIP = data.ip
+  console.log(cardholderIP)
+});
 
-//     console.log("abc");
-// });
 
 // Apple Pay
 var merchantIdentifier = 'merchant.com.herokuapp.checkout-demo-victor';
@@ -59,7 +65,8 @@ appleButton.addEventListener("click", function(){
 
     // Back end logic to create payment
       var payload = {
-        "token": applePaymentToken
+        "token": applePaymentToken,
+        "cardholderIP": cardholderIP
       };
       console.log(payload)
       console.log(JSON.stringify(applePaymentToken.paymentData))
@@ -173,7 +180,8 @@ function onCardTokenized(event) {
 
   /* HTTP Call make here */
   var payload = {
-    "token": event.token
+    "token": event.token,
+    "cardholderIP": cardholderIP
   };
 
   var threeDSChallenge = document.getElementById('3ds_challenge').value;
@@ -243,18 +251,17 @@ form.addEventListener("submit", function (event) {
 });
 
 function payHPP(){
-  // var payload = {
-  //   "apmMethod": apmMethod,
-  //   "currencyType": currencyType
-  // };
+  var payload = {
+    "cardholderIP": cardholderIP
+  };
 
   fetch(url_domain + "api/payments/hostedPaymentPage",
   {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-      }
-      // body: JSON.stringify(payload)
+      },
+      body: JSON.stringify(payload)
     })
   .then(response => response.json())
   .then(function(data){
@@ -268,7 +275,8 @@ function payHPP(){
 function payAPM(apmMethod, currencyType = 'EUR'){
   var payload = {
     "apmMethod": apmMethod,
-    "currencyType": currencyType
+    "currencyType": currencyType,
+    "cardholderIP": cardholderIP
   };
 
   fetch(url_domain + "api/payments/giropay",
