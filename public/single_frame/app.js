@@ -3,7 +3,7 @@ var payButton = document.getElementById("pay-button");
 var form = document.getElementById("payment-form");
 var errorStack = [];
 var paymentID;
-
+var bbc = 123;
 var url_domain = window.location.href 
 var myPublicKey = "pk_test_052ae7e0-780a-451a-8254-418a8032859f"
 var myIPDataKey = "263994c8926a8cfd56041c3ab982cbe2a3461d95ee5bb1791801bbc2"

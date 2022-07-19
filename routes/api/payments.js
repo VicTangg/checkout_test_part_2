@@ -32,6 +32,9 @@ router.post('/validateSession', async (req, res) => {
       key: fs.readFileSync(path.join(__dirname, '/certificates/certificate_sandbox.key')),
     });
     console.log('i am here 2')
+    // Change the domainName: '2f79-210-177-217-180.eu.ngrok.io',
+    // To work in ngrok
+
     let response = await axios.post(
       appleUrl,
       {
