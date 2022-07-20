@@ -6,8 +6,11 @@ var paymentID;
 var bbc = 123;
 var url_domain = window.location.href 
 var myPublicKey = "pk_test_052ae7e0-780a-451a-8254-418a8032859f"
+var myNASPublicKey = "pk_sbox_ddaz7g6hhgnbhklmyxzr7n5yzme"
 var myIPDataKey = "263994c8926a8cfd56041c3ab982cbe2a3461d95ee5bb1791801bbc2"
 var cardholderIP;
+var paymentRequestPre = document.getElementById("paymentRequest")
+var paymentResponsePre = document.getElementById("paymentResponse")
 
 function json(url) {
   return fetch(url).then(res => res.json());
@@ -109,7 +112,7 @@ var validateTheSession = function(theValidationURL, callback) {
 
 
 Frames.init({
-  publicKey: myPublicKey,
+  publicKey: myNASPublicKey,
   localization: "DE-DE"
 });
 
@@ -176,59 +179,51 @@ function onCardTokenized(event) {
 
   console.log(event.token)
 
-  
+  var threeDSChallenge = document.getElementById('3DS').checked;
+  var attemptN3DS = document.getElementById('attemptN3DS').checked;
+  var autoCapture = document.getElementById('autoCapture').checked;
+  var customerName = document.getElementById('fname').value;
+  var customerEmail = document.getElementById('email').value;
 
   /* HTTP Call make here */
   var payload = {
     "token": event.token,
-    "cardholderIP": cardholderIP
+    "cardholderIP": cardholderIP,
+    "threeDSChallenge": threeDSChallenge,
+    "attemptN3DS": attemptN3DS,
+    "autoCapture": autoCapture,
+    "customerName": customerName,
+    "customerEmail": customerEmail,
+    "amount": 2499
   };
 
-  var threeDSChallenge = document.getElementById('3ds_challenge').value;
-
-  if (threeDSChallenge === 'Y') {
-    console.log("3ds")
-    fetch(url_domain + "api/payments/3DS",
-    {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(function(data){
-      console.log(data)
-      if (data['success'] === true){
+  fetch(url_domain + "api/payments/cards",
+  {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+  })
+  .then(response => response.json())
+  .then(function(data){
+    console.log(data)
+    if (data['success'] === true){
+      if (data['3ds_redirect']){
         location.assign(data['3ds_redirect'])
-        // window.alert('Payment Authorized!')    
-      } else if (data['success'] === false) {
-        window.alert('Payment failed!')      
-      }
-    })    
-
-  } else {
-    console.log("no_3ds")
-    fetch(url_domain + "api/payments",
-    {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(function(data){
-      console.log(data)
-      if (data['success'] === true){
-        // location.assign(data['3ds_redirect'])
+      } else {
+        paymentID = data['paymentID']
         window.alert('Payment Authorized!')
-        paymentID = data['paymentID'];
-      } else if (data['success'] === false) {
-        window.alert('Payment failed!')      
+
+        paymentRequestPre.innerHTML = '<b>Payment Request</b> <br/>' + JSON.stringify(data['apiRequest'], undefined, 2)
+        paymentResponsePre.innerHTML = '<b>Payment Response</b> <br/>' + JSON.stringify(data['apiResponse'], undefined, 2)
       }
-    })    
-  }
+    } else if (data['success'] === false) {
+      window.alert('Payment failed!')      
+    }
+
+
+  })    
 }
 
 form.addEventListener("submit", function (event) {

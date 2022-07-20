@@ -20,190 +20,197 @@
     crossorigin="anonymous"></script>
 </head>
 
-<body>
-  <a href="../multi">multi frame demo</a>
-  <a href="../webhooks">Webhooks</a>
-  <br />
+<body style="background-color: #f9fafa;">
   <!-- <img src="./logo.png" alt="logo"> -->
-  <table class="table">
-    <tr>
-      <td>
-        Checkout
-      </td>
-      <td>
-        <span><b>Shipping Address</b></span><br /><br />
-        <span>Central Park, Berlin, Germany<br />
-          <span></span>
-      </td>
-      <td> <span><b>Order Summary</b></span><br /><br />
-        <span>Black T-Shirt * 1 --- EU XL Size/span><br />
-          <span><b>Total Price:</b> 24.99 EUR</span><br />
-      </td>
-    </tr>
-    </table>
-        
-    <form>
-      <div class="form-group">
-      
-        <label for="fname">Name</label>
-        <input type="text" id="fname" name="fname" value="John Smith">
+  <div class="container position-sticky">
+    <div class="row">
+      <div class="col">
+        <a class="btn btn-link" href="../multi">multi frame demo</a>
+        <a class="btn btn-link" href="../webhooks">Webhooks</a>
       </div>
-      <div class="form-group">
-          <label for="lname">Email</label>
-        <input type="text" id="lname" name="lname" value="john.smith@gmail.com">
-      </div>
-      <div class="form-group">
-          <label for="lname">Billing Address Line 1</label>
-        <input type="text" id="lname" name="lname" value="JJJ Street">
-      </div>
-      <div class="form-group">
-          <label for="lname">Billing Address Line 2</label>
-        <input type="text" id="lname" name="lname" value="Apartment 8">
-      </div>
-      <div class="form-group">
-          <label for="lname">zip</label>
-        <input type="text" id="lname" name="lname" value="31313">
-      </div>
-      <div class="form-group">
-          <label for="lname">city</label>
-        <input type="text" id="lname" name="lname" value="Hinesville">
-      </div>
-      <div class="form-group">
-          <label for="lname">state</label>
-        <input type="text" id="lname" name="lname" value="Georgia">
-      </div>
-      <div class="form-group">
-          <label for="lname">country</label>
-        <input type="text" id="lname" name="lname" value="US">
-      </div>
-      <div class="form-group">
-          <label for="lname">Phone</label>
-        <input type="text" id="lname" name="lname" value="9125084652">
-      </div>
-      <div class="form-group">
-          <label for="lname">3DS Challenge</label>
-        <input type="text" id="3ds_challenge" name="lname" value="N">
-      </div>
-    </form>
-    
-    <table class="table">
-    <tr>
-      <td><b>Card Payment (Single Frame)</b></td><td><td></td></td>
-    </tr>
-    <tr>
-      <td>
-        <form id="payment-form" method="POST" action="https://merchant.com/charge-card">
-          <div class="one-liner">
-            <div class="card-frame"></div>
-            <button id="pay-button" disabled>
-              24.99 € bezahlen
-            </button>
-          </div>
-          <p class="error-message"></p>
-          <p class="success-payment-message"></p>
-        </form>
-      </td><td><td></td></td>
-    </tr>
-    <tr>
-    <td><button onclick="checkPaymentStatus()">Check Payment status</button></td><td><td></td></td>
-  </tr>
-    <tr>
-      <td><b>Hosted Payment Page</b></td><td><td></td></td>
-    </tr>
-    <tr>
-      <td>
-        <button style="
-            border: 0;
-            border-radius: 8px;
-            width: 53vw;
-            min-width: 270px;
-            padding: 12px;
-            font: inherit;
-            font-size: 14px;
-            line-height: 1.72;
-            font-weight: 500;
-            color: #ffffc8;
-            background-color: #0c1142;
-            cursor: pointer;                   
-          " onclick="payHPP()">Try Hosted Payment Page</button></td><td><td></td></td>
-    </tr>
-    <tr>
-      <td><b>Local Payment Methods / Alternative Payment Methods</b></td>
-    </tr>
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/giropay.png" width="100" height="50" onclick="payAPM('giropay')">
-      </td><td></td><td></td>
-    </tr>
-    <!-- <tr><td><br/></td></tr> -->
-    <!-- <tr><td><b>Payment Option 3 -- Pay with Sofort</b></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/sofort.png" width="100" height="50" onclick="payAPM('sofort')">
-      </td><td></td><td></td>
-    </tr>
-    <!-- <tr><td><br/></td></tr>
-      <tr><td><b>Payment Option 4 -- Pay with Ideal</b></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/ideal.png" width="100" height="50" onclick="payAPM('ideal')">
-      </td><td></td><td></td>
-    </tr>
-    <!-- <tr><td><br/></td></tr>
-      <tr><td><b>Payment Option 5 -- Pay with Bancontact</b></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/bancontact.png" width="100" height="50"
-          onclick="payAPM('bancontact')">
-        </td><td></td><td></td>
-      </tr>
-    <!-- <tr><td><b>Payment Option 6 -- Pay with EPS</b></td></tr>
-      <tr><td><br/></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/eps.png" width="100" height="50" onclick="payAPM('eps')">
-      </td><td></td><td></td>
-    </tr>
-    <!-- <tr><td><b>Payment Option 7 -- Pay with Przelewy24</b></td></tr>
-      <tr><td><br/></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/p24.jpeg" width="100" height="50" onclick="payAPM('p24')">
-      </td><td></td><td></td>
-    </tr>
-    <!-- <tr><td><b>Payment Option 8-- Pay with POLI</b></td></tr>
-      <tr><td><br/></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/poli.png" width="100" height="50" onclick="payAPM('poli', 'NZD')">
-      </td><td></td><td></td>
-    </tr>
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/paypal.png" width="100" height="50" onclick="payAPM('paypal')">
-      </td><td></td><td></td>
-    </tr>
-    <!-- <tr><td><b>Payment Option 3 -- One touch with Google Pay</b></td></tr> -->
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/AlipayHK.svg" width="100" height="50" onclick="payAPM('alipay_hk')">
-        </td><td></td><td></td>
-    </tr>
-    <tr>
-      <td>
-        <img style="cursor: pointer" src="./images/AlipayCN.svg" width="100" height="50" onclick="payAPM('alipay_cn')">
-        </td> <td></td><td></td>
-    </tr>
-    <tr>
-      <td>
-        <div class="apple-pay-button" style="display: none;"></div>
-        <br />
-        <!-- <apple-pay-button buttonstyle="black" type="buy" locale="en-US"></apple-pay-button></div> -->
-        </div>
-      </td><td></td><td></td>
-    </tr>
+    </div>
 
-  </table>
+    <div class="row">
+      <div class="col-6">
+        <h4>Checkout form</h4>
+      </div>
+      <div class="col-6">
+        <h4>Order Details</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <form>
+          <div class="form-group">
+            <label for="fname">Name</label>
+            <div style="display:flex">
+              <input class="form-control" type="text" id="fname" name="fname" value="John Smith"
+                placeholder="Customer Name (<=255 characters)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lname">Email</label>
+            <input class="form-control" type="email" id="email" name="email" value="john.smith@gmail.com"
+              placeholder="Email (<=255 characters)">
+          </div>
+          <div class="form-group">
+            <label for="lname">Shipping Address</label>
+            <input class="form-control" type="text" id="address_line1" name="address_line1" value="Checkout.com"
+              placeholder="Address Line 1 (<=200 characters)">
+            <input class="form-control" type="text" id="address_line2" name="address_line2"
+              value="90 Tottenham Court Road" placeholder="Address Line 2 (<=200 characters)">
+            <input class="form-control" type="text" id="city" name="city" value="London"
+              placeholder="City (<=50 characters)">
+            <input class="form-control" type="text" id="state" name="state" value="London"
+              placeholder="State (<=? characters)">
+            <input class="form-control" type="text" id="country" name="country" value="GB"
+              placeholder="Country (2 characters ISO Country Code)">
+            <input class="form-control" type="text" id="zip" name="zip" value="W1T 4TJ"
+              placeholder="Zip Code (<=50 characters)">
+          </div>
+        </form>
+
+
+        <!-- Payment Options -->
+        <div>
+          <p><b>Payment Options</b></p>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="3DS">
+            <label class="form-check-label" for="defaultCheck1">
+              Enable 3DS
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="attemptN3DS">
+            <label class="form-check-label" for="defaultCheck1">
+              Attempt Non-3DS if card does not support (No liability-shift) TBD
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="autoCapture" checked>
+            <label class="form-check-label" for="defaultCheck1">
+              Auto Capture
+            </label>
+          </div>
+        </div>
+        <br />
+
+        <!-- Single Frame Here -->
+        <div>
+          <label for="lname"><b>Card Payment (Single Frame)</b></label>
+          <form id="payment-form" method="POST" action="https://merchant.com/charge-card">
+            <div class="one-liner">
+              <div class="card-frame"></div>
+              <button id="pay-button" disabled>
+                24.99 € bezahlen
+              </button>
+            </div>
+            <p class="error-message"></p>
+            <p class="success-payment-message"></p>
+          </form>
+          <!-- Get Payment Details button -->
+          <button class="btn btn-outline-primary" onclick="checkPaymentStatus()">Check Payment status</button>
+        </div> <br />
+
+        <!-- Hosted Payment Page -->
+        <div>
+          <label for="lname"><b>Hosted Payment Page</b></label>
+          <div>
+            <button style="
+        border: 0;
+        border-radius: 8px;
+        width: 25vw;
+        min-width: 270px;
+        padding: 12px;
+        font: inherit;
+        font-size: 14px;
+        line-height: 1.72;
+        font-weight: 500;
+        color: #ffffc8;
+        background-color: #0c1142;
+        cursor: pointer;                   
+      " onclick="payHPP()">Try Hosted Payment Page</button>
+          </div>
+        </div>
+        <br />
+
+        <div>
+          <label for="lname"><b>Local payment Methods / Alternative Payment Methods</b></label>
+          <div>
+            <img style="cursor: pointer" src="./images/giropay.png" width="100" height="50" onclick="payAPM('giropay')">
+            <img style="cursor: pointer" src="./images/sofort.png" width="100" height="50" onclick="payAPM('sofort')">
+            <img style="cursor: pointer" src="./images/ideal.png" width="100" height="50" onclick="payAPM('ideal')">
+            <img style="cursor: pointer" src="./images/bancontact.png" width="100" height="50"
+              onclick="payAPM('bancontact')">
+          </div>
+          <div> <img style="cursor: pointer" src="./images/eps.png" width="100" height="50" onclick="payAPM('eps')">
+            <img style="cursor: pointer" src="./images/p24.jpeg" width="100" height="50" onclick="payAPM('p24')">
+            <img style="cursor: pointer" src="./images/poli.png" width="100" height="50"
+              onclick="payAPM('poli', 'NZD')">
+            <img style="cursor: pointer" src="./images/paypal.png" width="100" height="50" onclick="payAPM('paypal')">
+            <img style="cursor: pointer" src="./images/AlipayHK.svg" width="100" height="50"
+              onclick="payAPM('alipay_hk')">
+            <img style="cursor: pointer" src="./images/AlipayCN.svg" width="100" height="50"
+              onclick="payAPM('alipay_cn')">
+          </div>
+          <br />
+          <div>
+            <label for="lname"><b>Apple Pay / Google Pay</b></label>
+            <div class="apple-pay-button" style="display: none;"></div>
+
+          </div>
+        </div>
+
+      </div>
+      <div class="col-6">
+        <div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div>
+                <span>
+                  1 x Black T-Shirt €14.99
+                </span>
+              </div>
+            </li>
+          </ul>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div>
+                <span>
+                  Subtotal: €14.99
+                </span>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div>
+                <span>
+                  Delivery fee: €10.00
+                </span>
+              </div>
+            </li>
+          </ul>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div>
+                <span>
+                  Total Price: €24.99
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <br/>
+        <div>
+          <pre id="paymentRequest" name="paymentRequest">
+        </pre>
+          <pre id="paymentResponse" name="paymentResponse">
+        </pre>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
   <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

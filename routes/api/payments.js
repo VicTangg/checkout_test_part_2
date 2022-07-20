@@ -85,7 +85,7 @@ router.post('/hostedPaymentPage', (req, res) => {
     method: 'post',
     url: 'https://api.sandbox.checkout.com/hosted-payments',
     headers: {
-      'Authorization': myMBCSecretkey,
+      'Authorization': 'Bearer ' + myNASSecretKey,
       'Content-Type': 'application/json'
     },
     data: data
@@ -239,83 +239,44 @@ router.post('/giropay', (req, res) => {
 
 })
 
-router.post('/', (req, res) => {
-  console.log(req.body.token);
-  /* Code here */
+router.post('/cards', (req, res) => {
   var data = {
     'source': {
       'type': 'token',
       'token': req.body.token
     },
+    'capture': req.body.autoCapture,
     'payment_ip': req.body.cardholderIP,
-    'amount': 2499,
+    'amount': req.body.amount,
+    '3ds': {},
+    'customer': {},
     'currency': 'EUR',
     'reference': 'ORD-5023-4E89',
-    'customer': {
-      'name': 'john smith',
-      'email': 'john.smith@example.com'
-    }
-  }
-
-  var config = {
-    method: 'post',
-    url: 'https://api.sandbox.checkout.com/payments',
-    headers: {
-      'Authorization': myMBCSecretkey,
-      'Content-Type': 'application/json'
-    },
-    data: data
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      console.log(response.data.status)
-      var paymentStatus = response.data.status;
-      if (paymentStatus === 'Authorized' || paymentStatus === 'Captured')
-        res.status(200).json(
-          {
-            'success': true,
-            'paymentID': response.data.id
-          }
-        );
-    })
-    .catch(function (error) {
-      console.log(error);
-      console.log('return')
-      res.status(200).json({ 'success': false })
-    });
-});
-
-router.post('/3DS', (req, res) => {
-  console.log(req.body.token);
-  /* Code here */
-  var data = {
-    "source": {
-      "type": "token",
-      "token": req.body.token
-    },
-    "amount": 2499,
-    'payment_ip': req.body.cardholderIP,
-    "currency": "EUR",
-    "reference": "ORD-5023-4E89",
-    "customer": {
-      'name': 'john smith',
-      "email": "john.smith@example.com"
-    },
-    "3ds": {
-      "enabled": true
-    },
     "success_url": "https://checkout-demo-victor.herokuapp.com/success",
     "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
   }
 
+  if (req.body.threeDSChallenge == true){
+    data['3ds']['enabled'] = true
+  }
+  if (req.body.attemptN3DS == true){
+    data['3ds']['attempt_n3d'] = true
+  }
+  if (req.body.customerName != ''){
+    data['customer']['name'] = req.body.customerName
+  }
+  if (req.body.customerEmail != ''){
+    data['customer']['email'] = req.body.customerEmail
+  }
+
+  // Log the request
   console.log(data)
+
   var config = {
     method: 'post',
     url: 'https://api.sandbox.checkout.com/payments',
     headers: {
-      'Authorization': myMBCSecretkey,
+      'Authorization': 'Bearer ' + myNASSecretKey,
       'Content-Type': 'application/json'
     },
     data: data
@@ -326,16 +287,21 @@ router.post('/3DS', (req, res) => {
       console.log(JSON.stringify(response.data));
       console.log(response.data.status)
       var paymentStatus = response.data.status;
-      if (paymentStatus === 'Authorized') {
+
+      if (paymentStatus === 'Authorized' || paymentStatus === 'Captured') {
         res.status(200).json({
-          'success': true
+          'success': true,
+          'paymentID': response.data.id,
+          'apiRequest': '',
+          'apiResponse': response.data
         });
       } else if (paymentStatus === 'Pending') {
         res.status(200).json({
           'success': true,
-          '3ds_redirect': response.data['_links']['redirect']['href']
+          '3ds_redirect': response.data['_links']['redirect']['href'],
+          'apiRequest': '',
+          'apiResponse': response.data
         });
-
       }
     })
     .catch(function (error) {
