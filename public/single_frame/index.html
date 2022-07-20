@@ -63,8 +63,13 @@
               placeholder="City (<=50 characters)">
             <input class="form-control" type="text" id="state" name="state" value="London"
               placeholder="State (<=? characters)">
-            <input class="form-control" type="text" id="country" name="country" value="GB"
-              placeholder="Country (2 characters ISO Country Code)">
+              <select class="custom-select" id="country" name="country">
+                <option selected>GB</option>
+                <option value="1">US</option>
+                <option value="2">HK</option>
+                <option value="3">FR</option>
+                <option value="3">Country (2 characters ISO Country Code)</option>
+              </select>              
             <input class="form-control" type="text" id="zip" name="zip" value="W1T 4TJ"
               placeholder="Zip Code (<=50 characters)">
           </div>
@@ -94,6 +99,31 @@
           </div>
         </div>
         <br />
+
+        <!-- Payment Options -->
+        <div>
+          <p><b>Payment Type</b></p>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentType" value="Regular" checked>
+            <label class="form-check-label" for="flexRadioDefault1">
+              Regular
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentType" value="Recurring">
+            <label class="form-check-label" for="flexRadioDefault2">
+              Recurring
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentType" value="MOTO">
+            <label class="form-check-label" for="flexRadioDefault3">
+              MOTO
+            </label>
+          </div>
+        </div>
+        <br />
+
 
         <!-- Single Frame Here -->
         <div>
@@ -148,6 +178,8 @@
             <img style="cursor: pointer" src="./images/poli.png" width="100" height="50"
               onclick="payAPM('poli', 'NZD')">
             <img style="cursor: pointer" src="./images/paypal.png" width="100" height="50" onclick="payAPM('paypal')">
+          </div>
+          <div>
             <img style="cursor: pointer" src="./images/AlipayHK.svg" width="100" height="50"
               onclick="payAPM('alipay_hk')">
             <img style="cursor: pointer" src="./images/AlipayCN.svg" width="100" height="50"
@@ -201,7 +233,11 @@
             </li>
           </ul>
         </div>
-        <br/>
+        <br />
+        <div>
+          <button type="button" class="btn btn-outline-primary" onclick="location.reload();">Reset Form</button>
+        </div>
+        <br />
         <div>
           <pre id="paymentRequest" name="paymentRequest">
         </pre>

@@ -184,6 +184,7 @@ function onCardTokenized(event) {
   var autoCapture = document.getElementById('autoCapture').checked;
   var customerName = document.getElementById('fname').value;
   var customerEmail = document.getElementById('email').value;
+  var paymentType = document.querySelector('input[name="paymentType"]:checked').value;
 
   /* HTTP Call make here */
   var payload = {
@@ -194,6 +195,7 @@ function onCardTokenized(event) {
     "autoCapture": autoCapture,
     "customerName": customerName,
     "customerEmail": customerEmail,
+    "paymentType": paymentType,
     "amount": 2499
   };
 
@@ -213,16 +215,12 @@ function onCardTokenized(event) {
         location.assign(data['3ds_redirect'])
       } else {
         paymentID = data['paymentID']
-        window.alert('Payment Authorized!')
-
         paymentRequestPre.innerHTML = '<b>Payment Request</b> <br/>' + JSON.stringify(data['apiRequest'], undefined, 2)
         paymentResponsePre.innerHTML = '<b>Payment Response</b> <br/>' + JSON.stringify(data['apiResponse'], undefined, 2)
       }
     } else if (data['success'] === false) {
       window.alert('Payment failed!')      
     }
-
-
   })    
 }
 

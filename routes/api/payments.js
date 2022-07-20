@@ -245,6 +245,7 @@ router.post('/cards', (req, res) => {
       'type': 'token',
       'token': req.body.token
     },
+    'payment_type': req.body.paymentType,
     'capture': req.body.autoCapture,
     'payment_ip': req.body.cardholderIP,
     'amount': req.body.amount,
@@ -292,14 +293,14 @@ router.post('/cards', (req, res) => {
         res.status(200).json({
           'success': true,
           'paymentID': response.data.id,
-          'apiRequest': '',
+          'apiRequest': data,
           'apiResponse': response.data
         });
       } else if (paymentStatus === 'Pending') {
         res.status(200).json({
           'success': true,
           '3ds_redirect': response.data['_links']['redirect']['href'],
-          'apiRequest': '',
+          'apiRequest': data,
           'apiResponse': response.data
         });
       }
