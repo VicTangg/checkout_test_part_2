@@ -54,18 +54,19 @@ router.post('/validateSession', async (req, res) => {
 
 router.post('/hostedPaymentPage', (req, res) => {
   var data = {
-    "amount": 2499,
-    "currency": "EUR",
-    "billing": {
-      "address": {
-        "country": "DE"
-      }
-    },
-    "customer": {
-      "name": "Chan Tai Man",
-      "email": "chan.taiman@checkout.com"
-    },
+    "reference": req.body.reference,
+    "capture": req.body.autoCapture,
     "payment_ip": req.body.cardholderIP,
+    "amount": req.body.amount,
+    "currency": req.body.currency,
+    "shipping": {
+      "address": ""
+    },
+    "billing": {
+      "address": ""
+    },
+    "3ds": {},
+    "customer": {},
     "allow_payment_methods": [
       "sofort",
       "p24",
@@ -80,6 +81,24 @@ router.post('/hostedPaymentPage', (req, res) => {
     "cancel_url": "https://checkout-demo-victor.herokuapp.com/failure"
   }
 
+  if (req.body.address) {
+    data['shipping']['address'] = req.body.address
+  }
+  if (req.body.address) {
+    data['billing']['address'] = req.body.address
+  }
+  if (req.body.threeDSChallenge == true){
+    data['3ds']['enabled'] = true
+  }
+  if (req.body.attemptN3DS == true){
+    data['3ds']['attempt_n3d'] = true
+  }
+  if (req.body.customerName != ''){
+    data['customer']['name'] = req.body.customerName
+  }
+  if (req.body.customerEmail != ''){
+    data['customer']['email'] = req.body.customerEmail
+  }
 
   var config = {
     method: 'post',
@@ -99,7 +118,9 @@ router.post('/hostedPaymentPage', (req, res) => {
       // if (paymentStatus === 'Authorized')
       res.status(200).json({
         'success': true,
-        'redirectUrl': response.data['_links']['redirect']['href']
+        'redirectUrl': response.data['_links']['redirect']['href'],
+        'apiRequest': data,
+        'apiResponse': response.data
       });
     })
     .catch(function (error) {
@@ -118,7 +139,7 @@ router.post('/paymentStatus', (req, res) => {
     method: 'get',
     url: 'https://api.sandbox.checkout.com/payments/' + paymentID,
     headers: {
-      'Authorization': myMBCSecretkey,
+      'Authorization': myNASSecretKey,
       'Content-Type': 'application/json'
     }
   };
@@ -127,9 +148,6 @@ router.post('/paymentStatus', (req, res) => {
     .then(function (response) {
       var status = response.data['status']
       console.log(status);
-      // console.log(response.data.status)
-      // var paymentStatus = response.data.status;
-      // if (paymentStatus === 'Authorized')
       res.status(200).json({
         'success': true,
         'paymentStatus': status
@@ -143,7 +161,7 @@ router.post('/paymentStatus', (req, res) => {
 })
 
 
-router.post('/giropay', (req, res) => {
+router.post('/apm', (req, res) => {
   apmMethod = req.body.apmMethod
   currencyType = req.body.currencyType
 
@@ -227,8 +245,10 @@ router.post('/giropay', (req, res) => {
       // if (paymentStatus === 'Authorized')
       res.status(200).json({
         'success': true,
-        'redirectUrl': response.data['_links']['redirect']['href']
-      });
+        'redirectUrl': response.data['_links']['redirect']['href'],
+        'apiRequest': data,
+        'apiResponse': response.data
+    });
     })
     .catch(function (error) {
       console.log(error);
@@ -245,18 +265,30 @@ router.post('/cards', (req, res) => {
       'type': 'token',
       'token': req.body.token
     },
+    'amount': req.body.amount,
+    "shipping": {
+      "address": ""
+    },
+    "billing": {
+      "address": ""
+    },
     'payment_type': req.body.paymentType,
     'capture': req.body.autoCapture,
     'payment_ip': req.body.cardholderIP,
-    'amount': req.body.amount,
     '3ds': {},
     'customer': {},
-    'currency': 'EUR',
-    'reference': 'ORD-5023-4E89',
+    'currency': req.body.currency,
+    'reference': req.body.reference,
     "success_url": "https://checkout-demo-victor.herokuapp.com/success",
     "failure_url": "https://checkout-demo-victor.herokuapp.com/failure"
   }
 
+  if (req.body.address) {
+    data['shipping']['address'] = req.body.address
+  }
+  if (req.body.address) {
+    data['billing']['address'] = req.body.address
+  }
   if (req.body.threeDSChallenge == true){
     data['3ds']['enabled'] = true
   }
@@ -299,7 +331,8 @@ router.post('/cards', (req, res) => {
       } else if (paymentStatus === 'Pending') {
         res.status(200).json({
           'success': true,
-          '3ds_redirect': response.data['_links']['redirect']['href'],
+          'paymentID': response.data.id,
+          'redirectUrl': response.data['_links']['redirect']['href'],
           'apiRequest': data,
           'apiResponse': response.data
         });

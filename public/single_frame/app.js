@@ -11,10 +11,81 @@ var myIPDataKey = "263994c8926a8cfd56041c3ab982cbe2a3461d95ee5bb1791801bbc2"
 var cardholderIP;
 var paymentRequestPre = document.getElementById("paymentRequest")
 var paymentResponsePre = document.getElementById("paymentResponse")
+var redirectUrl;
+var redirectButton = document.getElementById("redirectButton")
+
+var addressLine1 = document.getElementById("address_line1")
+var addressLine2 = document.getElementById("address_line2")
+var city = document.getElementById("city")
+var state = document.getElementById("state")
+var country = document.getElementById("country")
+var zip = document.getElementById("zip")
+
+
 
 function json(url) {
   return fetch(url).then(res => res.json());
 }
+
+function getAddress() {
+  var address = {
+    'address_line1': addressLine1.value,
+    'address_line2': addressLine2.value,
+    'state': state.value,
+    'city': city.value,
+    'zip': zip.value,
+    'country': country.value,
+  }
+  return address
+}
+
+function getPayloadValues() {
+  var threeDSChallenge = document.getElementById('3DS').checked;
+  var attemptN3DS = document.getElementById('attemptN3DS').checked;
+  var autoCapture = document.getElementById('autoCapture').checked;
+  var customerName = document.getElementById('fname').value;
+  var customerEmail = document.getElementById('email').value;
+  var paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+  var reference = document.getElementById('orderNumber').value;
+
+  var currencySelectBox = document.getElementById('currency')
+  var currency = currencySelectBox.value;
+  var currencyDisplayText = currencySelectBox.options[currencySelectBox.selectedIndex].text
+  var amount;
+
+  if (currencyDisplayText.includes('Divide by 100')) {
+    amount = parseInt(parseFloat(document.getElementById('totalPrice').value) * 100 )
+  } else if (currencyDisplayText.includes('Full Amount')) {
+    amount = parseInt(document.getElementById('totalPrice').value)
+  } else if (currencyDisplayText.includes('Divide by 1000')) {
+    amount = parseInt(parseFloat(document.getElementById('totalPrice').value) * 1000 )
+  }
+
+ 
+
+  /* HTTP Call make here */
+  var payload = {
+    "currency": currency,
+    "cardholderIP": cardholderIP,
+    "threeDSChallenge": threeDSChallenge,
+    "attemptN3DS": attemptN3DS,
+    "autoCapture": autoCapture,
+    "customerName": customerName,
+    "customerEmail": customerEmail,
+    "paymentType": paymentType,
+    "amount": amount,
+    "reference": reference,
+    "address": getAddress()
+  };
+
+  return payload
+}
+
+function displayPaymentReqRsp(apiRequest, apiResponse) {
+  paymentRequestPre.innerHTML = '<b>Payment Request</b> <br/>' + JSON.stringify(apiRequest, undefined, 2)
+  paymentResponsePre.innerHTML = '<b>Payment Response</b> <br/>' + JSON.stringify(apiResponse, undefined, 2)
+}
+
 
 json(`https://api.ipdata.co?api-key=${myIPDataKey}`).then(data => {
   cardholderIP = data.ip
@@ -172,32 +243,11 @@ Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, onCardTokenized);
 function onCardTokenized(event) {
   var el = document.querySelector(".success-payment-message");
   el.innerHTML = "Card tokenization completed<br>" 
-    
-    // 'Your card token is: <span class="token">' +
-    // event.token +
-    // "</span>";
-
   console.log(event.token)
 
-  var threeDSChallenge = document.getElementById('3DS').checked;
-  var attemptN3DS = document.getElementById('attemptN3DS').checked;
-  var autoCapture = document.getElementById('autoCapture').checked;
-  var customerName = document.getElementById('fname').value;
-  var customerEmail = document.getElementById('email').value;
-  var paymentType = document.querySelector('input[name="paymentType"]:checked').value;
-
-  /* HTTP Call make here */
-  var payload = {
-    "token": event.token,
-    "cardholderIP": cardholderIP,
-    "threeDSChallenge": threeDSChallenge,
-    "attemptN3DS": attemptN3DS,
-    "autoCapture": autoCapture,
-    "customerName": customerName,
-    "customerEmail": customerEmail,
-    "paymentType": paymentType,
-    "amount": 2499
-  };
+  // Prepare API payload
+  var payload = getPayloadValues()
+  payload['token'] = event.token
 
   fetch(url_domain + "api/payments/cards",
   {
@@ -211,21 +261,30 @@ function onCardTokenized(event) {
   .then(function(data){
     console.log(data)
     if (data['success'] === true){
-      if (data['3ds_redirect']){
-        location.assign(data['3ds_redirect'])
+      if (data['redirectUrl']){
+        paymentID = data['paymentID']
+        redirectUrl = data['redirectUrl']
+        redirectButton.style = "display:Block"
+        displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
+        Frames.enableSubmitForm();
+        payButton.disabled = false;
       } else {
         paymentID = data['paymentID']
-        paymentRequestPre.innerHTML = '<b>Payment Request</b> <br/>' + JSON.stringify(data['apiRequest'], undefined, 2)
-        paymentResponsePre.innerHTML = '<b>Payment Response</b> <br/>' + JSON.stringify(data['apiResponse'], undefined, 2)
+        displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
+        Frames.enableSubmitForm();
+        payButton.disabled = false;
       }
     } else if (data['success'] === false) {
       window.alert('Payment failed!')      
+      Frames.enableSubmitForm();
+      payButton.disabled = false;
     }
   })    
 }
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
+  payButton.disabled = true;
 
   Frames.cardholder = {
     name: "John Smith",
@@ -244,10 +303,10 @@ form.addEventListener("submit", function (event) {
 });
 
 function payHPP(){
-  var payload = {
-    "cardholderIP": cardholderIP
-  };
+  /* HTTP Call make here */
+  var payload = getPayloadValues()
 
+  console.log(payload)
   fetch(url_domain + "api/payments/hostedPaymentPage",
   {
       method: "POST",
@@ -259,8 +318,10 @@ function payHPP(){
   .then(response => response.json())
   .then(function(data){
     console.log(data)
-    location.assign(data['redirectUrl'])
-  })
+    redirectUrl = data['redirectUrl']
+    redirectButton.style = "display:Block"
+    displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
+})
 
   console.log('I am here')
 }
@@ -272,7 +333,7 @@ function payAPM(apmMethod, currencyType = 'EUR'){
     "cardholderIP": cardholderIP
   };
 
-  fetch(url_domain + "api/payments/giropay",
+  fetch(url_domain + "api/payments/apm",
   {
       method: "POST",
       headers: {
@@ -282,8 +343,9 @@ function payAPM(apmMethod, currencyType = 'EUR'){
     })
   .then(response => response.json())
   .then(function(data){
-    console.log(data)
-    location.assign(data['redirectUrl'])
+    redirectUrl = data['redirectUrl']
+    redirectButton.style = "display:Block"
+    displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
   })
 
   console.log('I am here')

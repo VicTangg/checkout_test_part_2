@@ -63,13 +63,13 @@
               placeholder="City (<=50 characters)">
             <input class="form-control" type="text" id="state" name="state" value="London"
               placeholder="State (<=? characters)">
-              <select class="custom-select" id="country" name="country">
-                <option selected>GB</option>
-                <option value="1">US</option>
-                <option value="2">HK</option>
-                <option value="3">FR</option>
-                <option value="3">Country (2 characters ISO Country Code)</option>
-              </select>              
+            <select class="custom-select" id="country" name="country">
+              <option selected>GB</option>
+              <option value="1">US</option>
+              <option value="2">HK</option>
+              <option value="3">FR</option>
+              <option value="3">Country (2 characters ISO Country Code)</option>
+            </select>
             <input class="form-control" type="text" id="zip" name="zip" value="W1T 4TJ"
               placeholder="Zip Code (<=50 characters)">
           </div>
@@ -132,7 +132,7 @@
             <div class="one-liner">
               <div class="card-frame"></div>
               <button id="pay-button" disabled>
-                24.99 € bezahlen
+                Pay with Card
               </button>
             </div>
             <p class="error-message"></p>
@@ -204,9 +204,6 @@
                 </span>
               </div>
             </li>
-          </ul>
-
-          <ul class="list-group">
             <li class="list-group-item">
               <div>
                 <span>
@@ -215,27 +212,42 @@
               </div>
             </li>
             <li class="list-group-item">
-              <div>
-                <span>
-                  Delivery fee: €10.00
-                </span>
-              </div>
+              <label for="lname">Currency</label>
+              <select class="custom-select" id="currency" name="currency">
+                <!-- <option value="1">Amount Divide by 100</option> -->
+                <option value="EUR" selected>EUR - Amount Divide by 100</option>
+                <option value="USD">USD - Amount Divide by 100</option>
+                <option value="HKD">HKD - Amount Divide by 100</option>
+                <!-- <option value="4">Full Amount</option> -->
+                <option value="JPY">JPY - Full Amount</option>
+                <option value="VND">VND - Full Amount</option>
+                <option value="KRW">KRW - Full Amount</option>
+                <!-- <option value="9">Amount Divide by 1000</option> -->
+                <option value="IQD">IQD - Amount Divide by 1000</option>
+                <option value="TND">TND - Amount Divide by 1000</option>
+                <option value="XXXXX">Currency (3 characters ISO Currency Code)</option>
+              </select>
+              </li>
+            <li class="list-group-item" style="display:inline">
+            <label for="lname">Total Price: <a href="https://www.checkout.com/docs/four/resources/calculating-the-amount">Guide</a></label>
+            <input class="form-control" type="text" id="totalPrice" name="totalPrice" value="24.99"
+              placeholder="amount (Must be integer)">
+            </li>
+            <li class="list-group-item">
+              <label for="lname">Order Number</label>
+              <input class="form-control" type="text" id="orderNumber" name="orderNumber" value="ORD-5023-4E89"
+                placeholder="Pass the order number as 'reference' field in API call (<= 50 characters)">
             </li>
           </ul>
 
-          <ul class="list-group">
-            <li class="list-group-item">
-              <div>
-                <span>
-                  Total Price: €24.99
-                </span>
-              </div>
-            </li>
-          </ul>
         </div>
         <br />
         <div>
           <button type="button" class="btn btn-outline-primary" onclick="location.reload();">Reset Form</button>
+        </div>
+        <br />
+        <div>
+          <button class="btn btn-outline-primary" id="redirectButton" style="display:None" onclick="location.assign(redirectUrl);">Click here for 3DS/HPP/APM redirect</button>
         </div>
         <br />
         <div>
