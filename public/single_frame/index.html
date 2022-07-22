@@ -30,48 +30,95 @@
       </div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-6">
         <h4>Checkout form</h4>
       </div>
       <div class="col-6">
         <h4>Order Details</h4>
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-6">
+        <h4>Cardholder Details</h4>
         <form>
           <div class="form-group">
-            <label for="fname">Name</label>
-            <div style="display:flex">
-              <input class="form-control" type="text" id="fname" name="fname" value="John Smith"
-                placeholder="Customer Name (<=255 characters)">
+            <div class="row">
+              <div class="col-5">
+                <label for="fname">Name</label>
+                <div style="display:flex">
+                  <input class="form-control" type="text" id="fname" name="fname" value="John Smith"
+                    placeholder="Customer Name (<=255 characters)">
+                </div>
+                  </div>
+              <div class="col-7">
+                <div class="form-group">
+                  <label for="lname">Email</label>
+                  <input class="form-control" type="email" id="email" name="email" value="john.smith@gmail.com"
+                    placeholder="Email (<=255 characters)">
+                </div>
+                  </div>
+
             </div>
           </div>
           <div class="form-group">
-            <label for="lname">Email</label>
-            <input class="form-control" type="email" id="email" name="email" value="john.smith@gmail.com"
-              placeholder="Email (<=255 characters)">
+            <label for="fname">Phone Number</label>
+            <div class="row" style="display:flex">
+              <div class="col-5">
+                <select class="custom-select" id="countryCode" name="countryCode">
+                  <option value="852" selected>Hong Kong +852</option>
+                  <option value="1">United States +1</option>
+                  <option value="81">Japan +81</option>
+                  <option value="33">France +33</option>
+                  <option value="XXXXX">Country Code (1-7 characters)</option>
+                </select>
+              </div>
+              <div class="col-7">
+                <input class="form-control" type="text" id="phoneNumber" name="phoneNumber" value="62027890"
+                  placeholder="Phone Number (6-25 characters)">
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="lname">Shipping Address</label>
-            <input class="form-control" type="text" id="address_line1" name="address_line1" value="Checkout.com"
+
+            <div class="form-example mb-2">
+              <input class="form-control" type="text" id="addressLine1" name="address_line1" value="Checkout.com"
               placeholder="Address Line 1 (<=200 characters)">
-            <input class="form-control" type="text" id="address_line2" name="address_line2"
+            </div>
+            <div class="form-example mb-2">
+              <input class="form-control" type="text" id="addressLine2" name="address_line2"
               value="90 Tottenham Court Road" placeholder="Address Line 2 (<=200 characters)">
+            </div>
+            <div class="row form-example mb-2">
+              <div class="col">
             <input class="form-control" type="text" id="city" name="city" value="London"
               placeholder="City (<=50 characters)">
+            </div>
+            <div class="col">
+
             <input class="form-control" type="text" id="state" name="state" value="London"
               placeholder="State (<=? characters)">
-            <select class="custom-select" id="country" name="country">
+            </div>
+          </div>
+
+          <div class="row form-example mb-2">
+
+            <div class="col">
+              <select class="custom-select" id="country" name="country">
               <option selected>GB</option>
               <option value="1">US</option>
               <option value="2">HK</option>
               <option value="3">FR</option>
               <option value="3">Country (2 characters ISO Country Code)</option>
             </select>
+          </div>
+          <div class="col">
             <input class="form-control" type="text" id="zip" name="zip" value="W1T 4TJ"
-              placeholder="Zip Code (<=50 characters)">
+            placeholder="Zip Code (<=50 characters)">
+          </div>
+        </div>
+
           </div>
         </form>
 
@@ -88,7 +135,7 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="attemptN3DS">
             <label class="form-check-label" for="defaultCheck1">
-              Attempt Non-3DS if card does not support (No liability-shift) TBD
+              Attempt Non-3DS if card does not support (No liability-shift)
             </label>
           </div>
           <div class="form-check">
@@ -196,21 +243,23 @@
       </div>
       <div class="col-6">
         <div>
+          <h4>Order Details</h4>
           <ul class="list-group">
             <li class="list-group-item">
               <div>
+                <img src="./images/t-shirt.jpeg" width="120" height="120"/>
                 <span>
-                  1 x Black T-Shirt €14.99
+                  1 x Black T-Shirt €24.99
                 </span>
               </div>
             </li>
-            <li class="list-group-item">
+            <!-- <li class="list-group-item">
               <div>
                 <span>
                   Subtotal: €14.99
                 </span>
               </div>
-            </li>
+            </li> -->
             <li class="list-group-item">
               <label for="lname">Currency</label>
               <select class="custom-select" id="currency" name="currency">
@@ -227,16 +276,17 @@
                 <option value="TND">TND - Amount Divide by 1000</option>
                 <option value="XXXXX">Currency (3 characters ISO Currency Code)</option>
               </select>
-              </li>
+            </li>
             <li class="list-group-item" style="display:inline">
-            <label for="lname">Total Price: <a href="https://www.checkout.com/docs/four/resources/calculating-the-amount">Guide</a></label>
-            <input class="form-control" type="text" id="totalPrice" name="totalPrice" value="24.99"
-              placeholder="amount (Must be integer)">
+              <label for="lname">Total Price: <a
+                  href="https://www.checkout.com/docs/four/resources/calculating-the-amount">Guide</a></label>
+              <input class="form-control" type="text" id="totalPrice" name="totalPrice" value="24.99"
+                placeholder="amount (Must be integer)">
             </li>
             <li class="list-group-item">
               <label for="lname">Order Number</label>
               <input class="form-control" type="text" id="orderNumber" name="orderNumber" value="ORD-5023-4E89"
-                placeholder="Pass the order number as 'reference' field in API call (<= 50 characters)">
+                placeholder="'reference' field in request (<= 50 characters)">
             </li>
           </ul>
 
@@ -247,7 +297,8 @@
         </div>
         <br />
         <div>
-          <button class="btn btn-outline-primary" id="redirectButton" style="display:None" onclick="location.assign(redirectUrl);">Click here for 3DS/HPP/APM redirect</button>
+          <button class="btn btn-outline-primary" id="redirectButton" style="display:None"
+            onclick="location.assign(redirectUrl);">Click here for 3DS/HPP/APM redirect</button>
         </div>
         <br />
         <div>

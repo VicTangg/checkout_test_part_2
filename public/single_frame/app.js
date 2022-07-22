@@ -14,12 +14,14 @@ var paymentResponsePre = document.getElementById("paymentResponse")
 var redirectUrl;
 var redirectButton = document.getElementById("redirectButton")
 
-var addressLine1 = document.getElementById("address_line1")
-var addressLine2 = document.getElementById("address_line2")
+var addressLine1 = document.getElementById("addressLine1")
+var addressLine2 = document.getElementById("addressLine2")
 var city = document.getElementById("city")
 var state = document.getElementById("state")
 var country = document.getElementById("country")
 var zip = document.getElementById("zip")
+var countryCodeField = document.getElementById("countryCode")
+var phoneNumberField = document.getElementById("phoneNumber")
 
 
 
@@ -286,18 +288,21 @@ form.addEventListener("submit", function (event) {
   event.preventDefault();
   payButton.disabled = true;
 
+  var phoneNumber = countryCodeField.value + phoneNumberField.value
+
+  console.log(phoneNumber)
   Frames.cardholder = {
-    name: "John Smith",
-    email: "john.smith@gmail.com",
+    name: document.getElementById('fname').value,
+    email: document.getElementById('email').value,
     billingAddress: {
-      addressLine1: "JJJ Street",
-      addressLine2: "Apartment 8",
-      zip: "31313",
-      city: "Hinesville",
-      state: "Georgia",
-      country: "US",
+      addressLine1: addressLine1.value,
+      addressLine2: addressLine2.value,
+      zip: zip.value,
+      city: city.value,
+      state: state.value,
+      country: country.value,
     },
-    phone: "9125084652"
+    phone: phoneNumber
   };
   Frames.submitCard();
 });

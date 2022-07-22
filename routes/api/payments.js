@@ -263,13 +263,11 @@ router.post('/cards', (req, res) => {
   var data = {
     'source': {
       'type': 'token',
-      'token': req.body.token
+      'token': req.body.token,
+      'billing_address': ""
     },
     'amount': req.body.amount,
     "shipping": {
-      "address": ""
-    },
-    "billing": {
       "address": ""
     },
     'payment_type': req.body.paymentType,
@@ -287,7 +285,7 @@ router.post('/cards', (req, res) => {
     data['shipping']['address'] = req.body.address
   }
   if (req.body.address) {
-    data['billing']['address'] = req.body.address
+    data['source']['billing_address'] = req.body.address
   }
   if (req.body.threeDSChallenge == true){
     data['3ds']['enabled'] = true
