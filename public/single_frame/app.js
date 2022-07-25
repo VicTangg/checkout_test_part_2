@@ -3,7 +3,6 @@ var payButton = document.getElementById("pay-button");
 var form = document.getElementById("payment-form");
 var errorStack = [];
 var paymentID;
-var bbc = 123;
 var url_domain = window.location.href 
 var myPublicKey = "pk_test_052ae7e0-780a-451a-8254-418a8032859f"
 var myNASPublicKey = "pk_sbox_ddaz7g6hhgnbhklmyxzr7n5yzme"
@@ -20,9 +19,10 @@ var city = document.getElementById("city")
 var state = document.getElementById("state")
 var country = document.getElementById("country")
 var zip = document.getElementById("zip")
+
 var countryCodeField = document.getElementById("countryCode")
 var phoneNumberField = document.getElementById("phoneNumber")
-
+var paymentIDField = document.getElementById("paymentID")
 
 
 function json(url) {
@@ -265,6 +265,7 @@ function onCardTokenized(event) {
     if (data['success'] === true){
       if (data['redirectUrl']){
         paymentID = data['paymentID']
+        paymentIDField.innerHTML = paymentID
         redirectUrl = data['redirectUrl']
         redirectButton.style = "display:Block"
         displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
@@ -272,6 +273,7 @@ function onCardTokenized(event) {
         payButton.disabled = false;
       } else {
         paymentID = data['paymentID']
+        paymentIDField.innerHTML = paymentID
         displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
         Frames.enableSubmitForm();
         payButton.disabled = false;

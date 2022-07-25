@@ -50,14 +50,14 @@
                   <input class="form-control" type="text" id="fname" name="fname" value="John Smith"
                     placeholder="Customer Name (<=255 characters)">
                 </div>
-                  </div>
+              </div>
               <div class="col-7">
                 <div class="form-group">
                   <label for="lname">Email</label>
                   <input class="form-control" type="email" id="email" name="email" value="john.smith@gmail.com"
                     placeholder="Email (<=255 characters)">
                 </div>
-                  </div>
+              </div>
 
             </div>
           </div>
@@ -84,40 +84,40 @@
 
             <div class="form-example mb-2">
               <input class="form-control" type="text" id="addressLine1" name="address_line1" value="Checkout.com"
-              placeholder="Address Line 1 (<=200 characters)">
+                placeholder="Address Line 1 (<=200 characters)">
             </div>
             <div class="form-example mb-2">
               <input class="form-control" type="text" id="addressLine2" name="address_line2"
-              value="90 Tottenham Court Road" placeholder="Address Line 2 (<=200 characters)">
+                value="90 Tottenham Court Road" placeholder="Address Line 2 (<=200 characters)">
             </div>
             <div class="row form-example mb-2">
               <div class="col">
-            <input class="form-control" type="text" id="city" name="city" value="London"
-              placeholder="City (<=50 characters)">
+                <input class="form-control" type="text" id="city" name="city" value="London"
+                  placeholder="City (<=50 characters)">
+              </div>
+              <div class="col">
+
+                <input class="form-control" type="text" id="state" name="state" value="London"
+                  placeholder="State (<=? characters)">
+              </div>
             </div>
-            <div class="col">
 
-            <input class="form-control" type="text" id="state" name="state" value="London"
-              placeholder="State (<=? characters)">
+            <div class="row form-example mb-2">
+
+              <div class="col">
+                <select class="custom-select" id="country" name="country">
+                  <option selected>GB</option>
+                  <option value="1">US</option>
+                  <option value="2">HK</option>
+                  <option value="3">FR</option>
+                  <option value="3">Country (2 characters ISO Country Code)</option>
+                </select>
+              </div>
+              <div class="col">
+                <input class="form-control" type="text" id="zip" name="zip" value="W1T 4TJ"
+                  placeholder="Zip Code (<=50 characters)">
+              </div>
             </div>
-          </div>
-
-          <div class="row form-example mb-2">
-
-            <div class="col">
-              <select class="custom-select" id="country" name="country">
-              <option selected>GB</option>
-              <option value="1">US</option>
-              <option value="2">HK</option>
-              <option value="3">FR</option>
-              <option value="3">Country (2 characters ISO Country Code)</option>
-            </select>
-          </div>
-          <div class="col">
-            <input class="form-control" type="text" id="zip" name="zip" value="W1T 4TJ"
-            placeholder="Zip Code (<=50 characters)">
-          </div>
-        </div>
 
           </div>
         </form>
@@ -186,9 +186,14 @@
             <p class="success-payment-message"></p>
           </form>
           <!-- Get Payment Details button -->
-          <button class="btn btn-outline-primary" onclick="checkPaymentStatus()">Check Payment status</button>
         </div> <br />
-
+        <div> 
+          <button class="btn btn-outline-primary" onclick="checkPaymentStatus()">Check Payment status</button>
+        </div>
+        <div>
+          <p style="display:inline;"><b>Payment ID:</b></p>
+          <p style="display:inline;" id="paymentID"></p>
+        </div> <br />
         <!-- Hosted Payment Page -->
         <div>
           <label for="lname"><b>Hosted Payment Page</b></label>
@@ -247,7 +252,7 @@
           <ul class="list-group">
             <li class="list-group-item">
               <div>
-                <img src="./images/t-shirt.jpeg" width="120" height="120"/>
+                <img src="./images/t-shirt.jpeg" width="120" height="120" />
                 <span>
                   1 x Black T-Shirt €24.99
                 </span>
