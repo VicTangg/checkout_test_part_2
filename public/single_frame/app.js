@@ -24,6 +24,9 @@ var countryCodeField = document.getElementById("countryCode")
 var phoneNumberField = document.getElementById("phoneNumber")
 var paymentIDField = document.getElementById("paymentID")
 
+var ipAddressField = document.getElementById("ipAddress");
+
+
 function updateTotalPrice() {
   var currencySelectBox = document.getElementById('currency')
   var currency = currencySelectBox.value;
@@ -102,6 +105,7 @@ function displayPaymentReqRsp(apiRequest, apiResponse) {
 json(`https://api.ipdata.co?api-key=${myIPDataKey}`).then(data => {
   cardholderIP = data.ip
   console.log(cardholderIP)
+  ipAddressField.innerHTML = cardholderIP;
 });
 
 
