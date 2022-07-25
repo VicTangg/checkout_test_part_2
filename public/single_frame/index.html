@@ -267,7 +267,8 @@
             </li> -->
             <li class="list-group-item">
               <label for="lname">Currency</label>
-              <select class="custom-select" id="currency" name="currency">
+              <select class="custom-select" id="currency" name="currency" 
+                onchange="updateTotalPrice()">
                 <!-- <option value="1">Amount Divide by 100</option> -->
                 <option value="EUR" selected>EUR - Amount Divide by 100</option>
                 <option value="USD">USD - Amount Divide by 100</option>

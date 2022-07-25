@@ -24,6 +24,18 @@ var countryCodeField = document.getElementById("countryCode")
 var phoneNumberField = document.getElementById("phoneNumber")
 var paymentIDField = document.getElementById("paymentID")
 
+function updateTotalPrice() {
+  var currencySelectBox = document.getElementById('currency')
+  var currency = currencySelectBox.value;
+
+  if (currency == 'EUR' || currency == 'USD' || currency == 'HKD') {
+    document.getElementById('totalPrice').value = 24.99
+  } else if (currency == 'JPY' || currency == 'VND' || currency == 'KEW') {
+    document.getElementById('totalPrice').value = 429000
+  } else if (currency == 'IQD' || currency == 'TND') {
+    document.getElementById('totalPrice').value = 43.582
+  }
+}
 
 function json(url) {
   return fetch(url).then(res => res.json());
@@ -55,15 +67,13 @@ function getPayloadValues() {
   var currencyDisplayText = currencySelectBox.options[currencySelectBox.selectedIndex].text
   var amount;
 
-  if (currencyDisplayText.includes('Divide by 100')) {
+  if (currencyDisplayText.includes('Divide by 1000')) {
+    amount = parseInt(parseFloat(document.getElementById('totalPrice').value) * 1000 )
+  } else if (currencyDisplayText.includes('Divide by 100')) {
     amount = parseInt(parseFloat(document.getElementById('totalPrice').value) * 100 )
   } else if (currencyDisplayText.includes('Full Amount')) {
     amount = parseInt(document.getElementById('totalPrice').value)
-  } else if (currencyDisplayText.includes('Divide by 1000')) {
-    amount = parseInt(parseFloat(document.getElementById('totalPrice').value) * 1000 )
-  }
-
- 
+  } 
 
   /* HTTP Call make here */
   var payload = {
