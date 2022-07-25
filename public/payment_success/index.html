@@ -1,6 +1,13 @@
 <h2>payment success!!</h2>
 <a href=".." >Back to home page</a>
+<p id="ckoSessionId"></p>
+
+
 <script>
+    let params = (new URL(document.location)).searchParams;
+    let ckoSessionId = params.get("cko-session-id");
+    let ckoSessionIdField = document.getElementById("ckoSessionId");
+    ckoSessionIdField.innerHTML = ckoSessionId;
 // function to_home(){var url_domain = window.location.href;
 // var splitted = url_domain.split("/");
 // var home_url = splitted[0] + "//" + splitted[2] + "/";
