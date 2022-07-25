@@ -284,6 +284,7 @@ function onCardTokenized(event) {
       } else {
         paymentID = data['paymentID']
         paymentIDField.innerHTML = paymentID
+        redirectButton.style = "display:None"
         displayPaymentReqRsp(data['apiRequest'], data['apiResponse'])
         Frames.enableSubmitForm();
         payButton.disabled = false;
