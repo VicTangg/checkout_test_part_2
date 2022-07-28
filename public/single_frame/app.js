@@ -321,6 +321,7 @@ form.addEventListener("submit", function (event) {
     },
     phone: phoneNumber
   };
+
   Frames.submitCard();
 });
 

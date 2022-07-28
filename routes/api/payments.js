@@ -319,22 +319,29 @@ router.post('/cards', (req, res) => {
       console.log(response.data.status)
       var paymentStatus = response.data.status;
 
-      if (paymentStatus === 'Authorized' || paymentStatus === 'Captured') {
-        res.status(200).json({
-          'success': true,
-          'paymentID': response.data.id,
-          'apiRequest': data,
-          'apiResponse': response.data
-        });
-      } else if (paymentStatus === 'Pending') {
-        res.status(200).json({
-          'success': true,
-          'paymentID': response.data.id,
-          'redirectUrl': response.data['_links']['redirect']['href'],
-          'apiRequest': data,
-          'apiResponse': response.data
-        });
-      }
+      res.status(200).json({
+        'success': true,
+        'paymentID': response.data.id,
+        'apiRequest': data,
+        'apiResponse': response.data
+      });
+
+      // if (paymentStatus === 'Authorized' || paymentStatus === 'Captured' || paymentStatus === 'Card Verified') {
+      //   res.status(200).json({
+      //     'success': true,
+      //     'paymentID': response.data.id,
+      //     'apiRequest': data,
+      //     'apiResponse': response.data
+      //   });
+      // } else if (paymentStatus === 'Pending') {
+      //   res.status(200).json({
+      //     'success': true,
+      //     'paymentID': response.data.id,
+      //     'redirectUrl': response.data['_links']['redirect']['href'],
+      //     'apiRequest': data,
+      //     'apiResponse': response.data
+      //   });
+      // }
     })
     .catch(function (error) {
       console.log(error);

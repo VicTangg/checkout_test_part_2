@@ -165,12 +165,14 @@ function onCardTokenizationFailed(error) {
 
 Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, onCardTokenized);
 function onCardTokenized(event) {
+  console.log(event.token);
   var el = document.querySelector(".success-payment-message");
   el.innerHTML =
     "Card tokenization completed<br>" +
     'Your card token is: <span class="token">' +
     event.token +
     "</span>";
+  Frames.enableSubmitForm();
 }
 
 Frames.addEventHandler(

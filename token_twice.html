@@ -1,0 +1,89 @@
+<body>
+
+    <!-- add frames script -->
+    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
+  
+    <form id="payment-form" method="POST" action="https://merchant.com/charge-card">
+      <div class="card-frame">
+        <!-- form will be added here -->
+      </div>
+      <!-- add submit button -->
+      <button id="pay-button" disabled>
+        PAY GBP 24.99
+      </button>
+    </form>
+  
+    <script>
+      var payButton = document.getElementById("pay-button");
+      var form = document.getElementById("payment-form");
+      var cnt = 0;
+  
+      Frames.init("pk_test_92f47e8d-fc9b-4c15-ae3c-aa77f8113e68");
+  
+      Frames.addEventHandler(
+        Frames.Events.CARD_VALIDATION_CHANGED,
+        function (event) {
+          //console.log("CARD_VALIDATION_CHANGED: %o", event);
+  
+          payButton.disabled = !Frames.isCardValid();
+        }
+      );
+  
+      Frames.addEventHandler(
+        Frames.Events.CARD_SUBMITTED,
+        function () {
+          payButton.disabled = true;
+          // display loader
+        }
+      );
+  
+      Frames.addEventHandler(
+        Frames.Events.CARD_TOKENIZED,
+        function (data) {
+          Frames.addCardToken(form, data.token);
+          if (cnt == 0){
+               console.log("saveing the first token:");
+               console.log(data.token);
+               cnt++;
+          }
+          else if(cnt == 1)
+          {
+               console.log("submit payment using the second one:");
+               console.log(data.token);
+               cnt = 0;
+          }
+  
+        }
+      );
+  
+      Frames.addEventHandler(
+        Frames.Events.CARD_TOKENIZATION_FAILED,
+        function (error) {
+          // catch the error
+          console.log(typeof(error));
+          console.log(error);
+        }
+      );
+  
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+  
+        Frames.cardholder = {
+          name: "John Smith",
+          billingAddress: {
+            addressLine1: "623 Slade Street",
+            addressLine2: "Apartment 8",
+            zip: "31313",
+            city: "Hinesville",
+            state: "Georgia",
+            country: "US",
+          }
+        };
+  
+        Frames.submitCard();
+        Frames.enableSubmitForm();
+        Frames.submitCard();
+      });
+    </script>
+  
+  </body>
